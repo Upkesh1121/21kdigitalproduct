@@ -1,10 +1,10 @@
-# DevPackAI — AI Developer Resource Pack
+# 21k — AI Developer Resource Pack
 
 A premium landing page and buyer-access product built with TanStack Start, React, and Tailwind CSS v4, deployed on Netlify.
 
 ## What It Is
 
-DevPackAI sells a curated **AI Developer Resource Pack** — 100+ organized resources including AI coding tool links, setup commands, prompt templates, checklists, and guides for developers building with AI.
+21k sells a curated **21k AI Developer Resource Pack** — 100+ organized resources including AI coding tool links, setup commands, prompt templates, checklists, and guides for developers building with AI.
 
 ## Key Technologies
 

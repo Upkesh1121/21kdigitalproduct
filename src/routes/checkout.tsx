@@ -1,61 +1,562 @@
 import { createFileRoute } from '@tanstack/react-router'
+import {
+  BadgeCheck,
+  Check,
+  ChevronLeft,
+  Clock,
+  CreditCard,
+  Download,
+  FileText,
+  LockKeyhole,
+  Mail,
+  ShieldCheck,
+  Sparkles,
+  WalletCards,
+} from 'lucide-react'
+import type { FormEvent } from 'react'
+import { useMemo, useState } from 'react'
+import { CountdownTimer } from '../components/CountdownTimer'
 
 export const Route = createFileRoute('/checkout')({
   component: CheckoutPage,
 })
 
+type PaymentMethod = 'card' | 'upi'
+
+const INCLUDED_ITEMS = [
+  '100+ curated AI developer resources',
+  '30+ prompt templates and workflows',
+  'Copy-paste setup commands',
+  'Launch and monetization checklists',
+  'PDF downloads for included guides',
+  'Future resource updates included',
+]
+
+const DELIVERY_STEPS = [
+  { icon: Mail, title: 'Email receipt', text: 'Purchase email receives the access link and code.' },
+  { icon: LockKeyhole, title: 'Buyer access', text: 'Use your code to unlock dashboard resources.' },
+  { icon: Download, title: 'PDF downloads', text: 'Download only the included PDF guides from the library.' },
+]
+
 function CheckoutPage() {
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card')
+  const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
+  const [coupon, setCoupon] = useState('')
+  const [message, setMessage] = useState('')
+
+  const couponStatus = useMemo(() => {
+    if (!coupon.trim()) return null
+    if (coupon.trim().toLowerCase() === 'launch21') {
+      return { valid: true, text: 'Launch offer already applied.' }
+    }
+    return { valid: false, text: 'This code is not active yet.' }
+  }, [coupon])
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (!name.trim() || !email.trim()) {
+      setMessage('Add your name and email so access can be delivered after payment.')
+      return
+    }
+
+    setMessage('Payment integration is coming soon. Buyer access code delivery is ready for the connected checkout flow.')
+  }
+
   return (
-    <div style={{ background: '#050810', minHeight: '100vh', padding: '96px 16px 60px' }}>
-      <div style={{ maxWidth: '480px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div className="badge badge-cyan" style={{ display: 'inline-flex', marginBottom: '20px' }}>
-            Secure Checkout
-          </div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 900, color: '#f1f5f9', marginBottom: '8px' }}>
-            AI Developer Resource Pack
-          </h1>
-          <p style={{ color: '#64748b' }}>Lifetime access · Instant delivery</p>
-        </div>
+    <div
+      className="cyber-grid"
+      style={{
+        background:
+          'radial-gradient(circle at 12% 10%, rgba(247,215,116,0.09), transparent 28%), radial-gradient(circle at 86% 18%, rgba(16,185,129,0.08), transparent 30%), #050810',
+        minHeight: '100vh',
+        padding: 'clamp(84px, 9vw, 120px) 16px 72px',
+      }}
+    >
+      <style>{`
+        .checkout-field:focus {
+          border-color: rgba(247, 215, 116, 0.66) !important;
+          box-shadow: 0 0 0 3px rgba(247, 215, 116, 0.12);
+        }
 
-        <div style={{ background: '#0d1117', border: '1px solid rgba(0,212,255,0.15)', borderRadius: '16px', padding: '32px', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-            <div>
-              <div style={{ color: '#e2e8f0', fontWeight: 700 }}>AI Developer Resource Pack</div>
-              <div style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '4px' }}>100+ resources · Full lifetime access</div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ color: '#00d4ff', fontSize: '1.5rem', fontWeight: 900 }}>₹499</div>
-              <div style={{ color: '#475569', fontSize: '0.8rem' }}>$9 USD</div>
-            </div>
-          </div>
+        .checkout-action:focus-visible,
+        .checkout-link:focus-visible,
+        .checkout-method:focus-visible {
+          outline: 2px solid rgba(247, 215, 116, 0.85);
+          outline-offset: 3px;
+        }
 
-          <div style={{ background: '#111827', border: '1px solid rgba(139,92,246,0.2)', borderRadius: '10px', padding: '20px', marginBottom: '24px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', color: '#8b5cf6', fontWeight: 600, fontSize: '0.95rem' }}>
-              <span>🔧</span>
-              <span>Checkout coming soon</span>
+        @media (max-width: 900px) {
+          .checkout-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .checkout-summary {
+            position: static !important;
+          }
+        }
+
+        @media (max-width: 560px) {
+          .checkout-panel,
+          .checkout-summary {
+            padding: 22px !important;
+          }
+
+          .checkout-hero-row,
+          .checkout-price-row {
+            align-items: flex-start !important;
+            flex-direction: column !important;
+          }
+        }
+      `}</style>
+
+      <div style={{ maxWidth: '1160px', margin: '0 auto' }}>
+        <a
+          href="/#pricing"
+          className="checkout-link"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: '#94a3b8',
+            textDecoration: 'none',
+            fontSize: '0.9rem',
+            fontWeight: 700,
+            marginBottom: '26px',
+          }}
+        >
+          <ChevronLeft size={16} />
+          Back to pricing
+        </a>
+
+        <div
+          className="checkout-hero-row"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            gap: '24px',
+            alignItems: 'flex-end',
+            marginBottom: '32px',
+          }}
+        >
+          <div style={{ maxWidth: '680px' }}>
+            <div className="badge badge-cyan" style={{ display: 'inline-flex', marginBottom: '18px' }}>
+              Secure Checkout
             </div>
-            <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6, margin: 0 }}>
-              Payment integration is being set up. Checkout will be available via Stripe or Lemon Squeezy shortly. Check back soon.
+            <h1
+              style={{
+                color: '#f8fafc',
+                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                fontWeight: 900,
+                lineHeight: 1.06,
+                margin: '0 0 14px',
+              }}
+            >
+              Complete your <span className="gradient-text">21k Pack</span> order
+            </h1>
+            <p style={{ color: '#94a3b8', fontSize: '1.05rem', lineHeight: 1.7, margin: 0 }}>
+              Lifetime access to the curated AI developer resource pack, delivered through the buyer dashboard with PDF downloads only where included.
             </p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {['100+ curated resource links', 'Prompt template library', 'Copy-paste setup commands', 'Tool setup guides', 'Downloadable ZIP', 'Future updates included'].map(f => (
-              <div key={f} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <span style={{ color: '#10b981' }}>✓</span>
-                <span style={{ color: '#94a3b8', fontSize: '0.875rem' }}>{f}</span>
-              </div>
-            ))}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'rgba(16,185,129,0.08)',
+              border: '1px solid rgba(16,185,129,0.24)',
+              borderRadius: '10px',
+              padding: '12px 14px',
+              color: '#a7f3d0',
+              fontSize: '0.9rem',
+              fontWeight: 800,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <ShieldCheck size={18} />
+            Buyer access ready
           </div>
         </div>
 
-        <div style={{ textAlign: 'center' }}>
-          <a href="/#pricing" style={{ color: '#475569', fontSize: '0.875rem', textDecoration: 'none' }}>
-            ← Back to pricing
-          </a>
+        <div
+          className="checkout-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) 390px',
+            gap: '22px',
+            alignItems: 'start',
+          }}
+        >
+          <form
+            onSubmit={handleSubmit}
+            className="checkout-panel"
+            style={{
+              background: 'linear-gradient(135deg, rgba(13,17,23,0.97), rgba(17,24,39,0.94))',
+              border: '1px solid rgba(247,215,116,0.18)',
+              borderRadius: '18px',
+              padding: 'clamp(24px, 4vw, 34px)',
+              boxShadow: '0 20px 80px rgba(0,0,0,0.34)',
+            }}
+          >
+            <CheckoutSectionHeader
+              kicker="Step 1"
+              title="Buyer Details"
+              text="Use the email where you want the access code and dashboard link delivered."
+            />
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '28px' }}>
+              <Field label="Full name" id="buyer-name">
+                <input
+                  id="buyer-name"
+                  className="checkout-field"
+                  value={name}
+                  onChange={event => setName(event.target.value)}
+                  placeholder="Your name"
+                  autoComplete="name"
+                  style={fieldStyle}
+                />
+              </Field>
+
+              <Field label="Email address" id="buyer-email">
+                <input
+                  id="buyer-email"
+                  className="checkout-field"
+                  type="email"
+                  value={email}
+                  onChange={event => setEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  style={fieldStyle}
+                />
+              </Field>
+            </div>
+
+            <CheckoutSectionHeader
+              kicker="Step 2"
+              title="Payment Method"
+              text="Choose how you want to pay once the live payment provider is connected."
+            />
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '12px', marginBottom: '22px' }}>
+              <PaymentOption
+                active={paymentMethod === 'card'}
+                icon={CreditCard}
+                title="Card"
+                text="Credit or debit card"
+                onClick={() => setPaymentMethod('card')}
+              />
+              <PaymentOption
+                active={paymentMethod === 'upi'}
+                icon={WalletCards}
+                title="UPI"
+                text="UPI apps and QR pay"
+                onClick={() => setPaymentMethod('upi')}
+              />
+            </div>
+
+            <div
+              style={{
+                background: '#111827',
+                border: '1px solid rgba(183,121,31,0.24)',
+                borderRadius: '12px',
+                padding: '18px',
+                marginBottom: '28px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#f7d774', fontWeight: 800, marginBottom: '8px' }}>
+                <Clock size={18} />
+                Checkout coming soon
+              </div>
+              <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.65, margin: 0 }}>
+                The payment gateway is not connected yet. This page is ready for the live checkout flow and currently records no payment details.
+              </p>
+            </div>
+
+            <CheckoutSectionHeader
+              kicker="Step 3"
+              title="Offer Code"
+              text="Launch discount is already included in the order total."
+            />
+
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '12px', flexWrap: 'wrap' }}>
+              <input
+                className="checkout-field"
+                value={coupon}
+                onChange={event => setCoupon(event.target.value)}
+                placeholder="Optional code"
+                aria-label="Offer code"
+                style={{ ...fieldStyle, flex: '1 1 220px' }}
+              />
+              <button
+                type="button"
+                className="btn-secondary checkout-action"
+                onClick={() => setCoupon(coupon || 'LAUNCH21')}
+                style={{ padding: '12px 18px', flex: '0 0 auto' }}
+              >
+                Apply
+              </button>
+            </div>
+
+            {couponStatus ? (
+              <p style={{ color: couponStatus.valid ? '#10b981' : '#f87171', fontSize: '0.84rem', margin: '0 0 24px' }}>
+                {couponStatus.text}
+              </p>
+            ) : (
+              <div style={{ marginBottom: '24px' }} />
+            )}
+
+            <button
+              type="submit"
+              className="btn-primary checkout-action"
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '16px 18px',
+                fontSize: '16px',
+              }}
+            >
+              <LockKeyhole size={18} />
+              Continue to Payment
+            </button>
+
+            {message ? (
+              <div
+                role="status"
+                style={{
+                  background: 'rgba(247,215,116,0.07)',
+                  border: '1px solid rgba(247,215,116,0.18)',
+                  borderRadius: '10px',
+                  padding: '14px 16px',
+                  color: '#f8e7a0',
+                  fontSize: '0.88rem',
+                  lineHeight: 1.55,
+                  marginTop: '16px',
+                }}
+              >
+                {message}
+              </div>
+            ) : null}
+          </form>
+
+          <aside
+            className="checkout-summary"
+            style={{
+              position: 'sticky',
+              top: '88px',
+              background: 'linear-gradient(135deg, rgba(13,17,23,0.98), rgba(17,24,39,0.96))',
+              border: '1px solid rgba(247,215,116,0.2)',
+              borderRadius: '18px',
+              padding: '28px',
+              boxShadow: '0 24px 90px rgba(0,0,0,0.38)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '18px' }}>
+              <div>
+                <div className="badge badge-green" style={{ display: 'inline-flex', marginBottom: '12px' }}>
+                  80% OFF
+                </div>
+                <h2 style={{ color: '#f8fafc', fontSize: '1.35rem', lineHeight: 1.2, fontWeight: 900, margin: 0 }}>
+                  21k AI Developer Resource Pack
+                </h2>
+              </div>
+              <Sparkles size={28} color="#f7d774" />
+            </div>
+
+            <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6, margin: '0 0 20px' }}>
+              Organized links, commands, prompts, launch templates, and downloadable PDFs for AI-powered development.
+            </p>
+
+            <div
+              className="checkout-price-row"
+              style={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'space-between',
+                gap: '16px',
+                background: 'rgba(247,215,116,0.06)',
+                border: '1px solid rgba(247,215,116,0.18)',
+                borderRadius: '14px',
+                padding: '18px',
+                marginBottom: '18px',
+              }}
+            >
+              <div>
+                <div style={{ color: '#64748b', fontWeight: 800, textDecoration: 'line-through' }}>Rs. 999</div>
+                <div style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: 700, textDecoration: 'line-through', marginTop: '2px' }}>
+                  Rs. 499
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ color: '#f8fafc', fontSize: '2.8rem', fontWeight: 900, lineHeight: 0.95 }}>Rs. 199</div>
+                <div style={{ color: '#10b981', fontSize: '0.82rem', fontWeight: 900, marginTop: '8px' }}>Launch price</div>
+              </div>
+            </div>
+
+            <CountdownTimer compact />
+
+            <div style={{ height: '1px', background: 'rgba(247,215,116,0.12)', margin: '22px 0' }} />
+
+            <div style={{ display: 'grid', gap: '11px', marginBottom: '24px' }}>
+              {INCLUDED_ITEMS.map(item => (
+                <div key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  <span
+                    style={{
+                      width: '19px',
+                      height: '19px',
+                      borderRadius: '50%',
+                      background: 'rgba(16,185,129,0.12)',
+                      color: '#10b981',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flex: '0 0 auto',
+                      marginTop: '1px',
+                    }}
+                  >
+                    <Check size={13} strokeWidth={3} />
+                  </span>
+                  <span style={{ color: '#cbd5e1', fontSize: '0.88rem', lineHeight: 1.45 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'grid', gap: '10px' }}>
+              {DELIVERY_STEPS.map(step => {
+                const Icon = step.icon
+                return (
+                  <div
+                    key={step.title}
+                    style={{
+                      display: 'flex',
+                      gap: '12px',
+                      background: '#111827',
+                      border: '1px solid rgba(247,215,116,0.12)',
+                      borderRadius: '10px',
+                      padding: '13px',
+                    }}
+                  >
+                    <Icon size={18} color="#f7d774" style={{ flex: '0 0 auto', marginTop: '2px' }} />
+                    <div>
+                      <div style={{ color: '#e2e8f0', fontSize: '0.86rem', fontWeight: 800 }}>{step.title}</div>
+                      <div style={{ color: '#64748b', fontSize: '0.8rem', lineHeight: 1.45, marginTop: '3px' }}>{step.text}</div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '9px',
+                color: '#94a3b8',
+                fontSize: '0.8rem',
+                lineHeight: 1.45,
+                marginTop: '18px',
+              }}
+            >
+              <BadgeCheck size={17} color="#10b981" style={{ flex: '0 0 auto' }} />
+              No subscription. Lifetime access after purchase.
+            </div>
+          </aside>
         </div>
       </div>
     </div>
   )
 }
+
+function CheckoutSectionHeader({ kicker, title, text }: { kicker: string; title: string; text: string }) {
+  return (
+    <div style={{ marginBottom: '16px' }}>
+      <div style={{ color: '#f7d774', fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '6px' }}>
+        {kicker}
+      </div>
+      <h2 style={{ color: '#f8fafc', fontSize: '1.18rem', fontWeight: 900, margin: '0 0 6px' }}>{title}</h2>
+      <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.55, margin: 0 }}>{text}</p>
+    </div>
+  )
+}
+
+function Field({ label, id, children }: { label: string; id: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label htmlFor={id} style={{ display: 'block', color: '#cbd5e1', fontSize: '0.86rem', fontWeight: 800, marginBottom: '8px' }}>
+        {label}
+      </label>
+      {children}
+    </div>
+  )
+}
+
+function PaymentOption({
+  active,
+  icon: Icon,
+  title,
+  text,
+  onClick,
+}: {
+  active: boolean
+  icon: typeof CreditCard
+  title: string
+  text: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      className="checkout-method"
+      onClick={onClick}
+      aria-pressed={active}
+      style={{
+        width: '100%',
+        textAlign: 'left',
+        background: active ? 'rgba(247,215,116,0.1)' : '#111827',
+        border: `1px solid ${active ? 'rgba(247,215,116,0.48)' : 'rgba(247,215,116,0.14)'}`,
+        borderRadius: '12px',
+        padding: '16px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+      }}
+    >
+      <span
+        style={{
+          width: '38px',
+          height: '38px',
+          borderRadius: '10px',
+          background: active ? 'linear-gradient(135deg, #f7d774, #b7791f)' : 'rgba(247,215,116,0.08)',
+          color: active ? '#090806' : '#f7d774',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: '0 0 auto',
+        }}
+      >
+        <Icon size={19} />
+      </span>
+      <span>
+        <span style={{ display: 'block', color: '#e2e8f0', fontSize: '0.93rem', fontWeight: 900 }}>{title}</span>
+        <span style={{ display: 'block', color: '#64748b', fontSize: '0.8rem', marginTop: '3px' }}>{text}</span>
+      </span>
+    </button>
+  )
+}
+
+const fieldStyle = {
+  width: '100%',
+  background: '#111827',
+  border: '1px solid rgba(247,215,116,0.2)',
+  borderRadius: '10px',
+  padding: '13px 14px',
+  color: '#e2e8f0',
+  fontSize: '0.96rem',
+  outline: 'none',
+  boxSizing: 'border-box',
+} as const

@@ -1,10 +1,10 @@
-# AGENTS.md — DevPackAI Project
+# AGENTS.md — 21k Project
 
-This document provides an overview of the DevPackAI project for developers and AI agents.
+This document provides an overview of the 21k project for developers and AI agents.
 
 ## Project Purpose
 
-DevPackAI is a premium product landing page that sells an "AI Developer Resource Pack" — a curated collection of AI developer resources, tools, prompts, and guides. The site explains the value proposition, shows public previews, and drives purchases.
+21k is a premium product landing page that sells the "21k AI Developer Resource Pack" — a curated collection of AI developer resources, tools, prompts, and guides. The site explains the value proposition, shows public previews, and drives purchases.
 
 ## Design System (styles.css)
 
@@ -25,7 +25,7 @@ Utility classes: `.gradient-text`, `.card-glow`, `.btn-primary`, `.btn-secondary
 - `clamp()` used throughout for fluid typography
 - Mobile hamburger visibility controlled via inline `<style>` tag in RootDocument
 - Payment not connected — checkout/login show "coming soon" state
-- External links labeled as: Official Tool, Documentation, Reference Tutorial, Original Content
+- External links labeled as: Official Tool, Documentation, Reference Tutorial, Video Reference, GitHub Repo
 
 ---
 

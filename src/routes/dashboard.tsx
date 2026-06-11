@@ -18,8 +18,8 @@ function DashboardPage() {
     <div style={{ background: '#050810', minHeight: '100vh', padding: '96px 16px 60px' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <div style={{
-          background: 'linear-gradient(135deg, rgba(0,212,255,0.06), rgba(139,92,246,0.06))',
-          border: '1px solid rgba(0,212,255,0.2)',
+          background: 'linear-gradient(135deg, rgba(247,215,116,0.06), rgba(183,121,31,0.06))',
+          border: '1px solid rgba(247,215,116,0.2)',
           borderRadius: '12px',
           padding: '20px 24px',
           marginBottom: '32px',
@@ -32,10 +32,10 @@ function DashboardPage() {
           <div style={{ flex: 1 }}>
             <div style={{ color: '#e2e8f0', fontWeight: 700, marginBottom: '4px' }}>Access Required</div>
             <div style={{ color: '#64748b', fontSize: '0.875rem' }}>
-              This dashboard is for buyers only. Purchase the AI Developer Resource Pack to unlock full access.
+              This dashboard is for buyers only. Purchase the 21k AI Developer Resource Pack to unlock full access.
             </div>
           </div>
-          <a href="/checkout" style={{ background: 'linear-gradient(135deg, #00d4ff, #8b5cf6)', color: 'white', fontWeight: 700, padding: '10px 20px', borderRadius: '8px', textDecoration: 'none', fontSize: '14px', flexShrink: 0 }}>
+          <a href="/checkout" style={{ background: 'linear-gradient(135deg, #f7d774, #b7791f)', color: '#090806', fontWeight: 700, padding: '10px 20px', borderRadius: '8px', textDecoration: 'none', fontSize: '14px', flexShrink: 0 }}>
             Get Access →
           </a>
         </div>
@@ -50,10 +50,10 @@ function DashboardPage() {
         <div style={{ position: 'relative', filter: 'blur(2px)', pointerEvents: 'none', userSelect: 'none' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '24px' }}>
             {DASH_SECTIONS.map(s => (
-              <div key={s.title} style={{ background: '#0d1117', border: '1px solid rgba(0,212,255,0.12)', borderRadius: '12px', padding: '24px' }}>
+              <div key={s.title} style={{ background: '#0d1117', border: '1px solid rgba(247,215,116,0.12)', borderRadius: '12px', padding: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
                   <span style={{ fontSize: '1.75rem' }}>{s.icon}</span>
-                  <span style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>{s.count}</span>
+                  <span style={{ background: 'rgba(247,215,116,0.1)', border: '1px solid rgba(247,215,116,0.2)', color: '#f7d774', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>{s.count}</span>
                 </div>
                 <div style={{ color: '#e2e8f0', fontWeight: 700, marginBottom: '6px' }}>{s.title}</div>
                 <div style={{ color: '#475569', fontSize: '0.875rem' }}>{s.desc}</div>
@@ -61,12 +61,12 @@ function DashboardPage() {
             ))}
           </div>
 
-          <div style={{ background: '#0d1117', border: '1px solid rgba(0,212,255,0.12)', borderRadius: '12px', overflow: 'hidden' }}>
-            <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(0,212,255,0.08)', color: '#94a3b8', fontWeight: 600, fontSize: '0.875rem' }}>
+          <div style={{ background: '#0d1117', border: '1px solid rgba(247,215,116,0.12)', borderRadius: '12px', overflow: 'hidden' }}>
+            <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(247,215,116,0.08)', color: '#94a3b8', fontWeight: 600, fontSize: '0.875rem' }}>
               Recent Resources
             </div>
             {['OpenCode Zen Setup', 'Claude Code Alternatives', 'GitHub Student Pack Guide', 'VS Code + Cline Config'].map(r => (
-              <div key={r} style={{ padding: '14px 24px', borderBottom: '1px solid rgba(0,212,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div key={r} style={{ padding: '14px 24px', borderBottom: '1px solid rgba(247,215,116,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ color: '#94a3b8', fontSize: '0.875rem' }}>{r}</span>
                 <span style={{ color: '#10b981', fontSize: '0.8rem' }}>✓ Available</span>
               </div>
@@ -76,7 +76,7 @@ function DashboardPage() {
 
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
           <p style={{ color: '#64748b', marginBottom: '16px' }}>Get the pack to unlock your full dashboard</p>
-          <a href="/checkout" style={{ background: 'linear-gradient(135deg, #00d4ff, #8b5cf6)', color: 'white', fontWeight: 700, padding: '16px 32px', borderRadius: '8px', textDecoration: 'none', fontSize: '16px', display: 'inline-block' }}>
+          <a href="/checkout" style={{ background: 'linear-gradient(135deg, #f7d774, #b7791f)', color: '#090806', fontWeight: 700, padding: '16px 32px', borderRadius: '8px', textDecoration: 'none', fontSize: '16px', display: 'inline-block' }}>
             Unlock Dashboard →
           </a>
         </div>

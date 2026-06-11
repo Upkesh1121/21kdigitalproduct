@@ -1,5 +1,5 @@
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -7,11 +7,11 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'DevPackAI — AI Developer Resource Pack' },
+      { title: '21k — AI Developer Resource Pack' },
       {
         name: 'description',
         content:
-          'Premium AI coding resources, prompts, setup commands, tools, and tutorials in one organized pack.',
+          '21k AI Developer Resource Pack for builders who want to build, learn, and earn with AI coding workflows.',
       },
       { name: 'theme-color', content: '#050810' },
     ],
@@ -28,17 +28,14 @@ function Nav() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
             <div style={{
-              width: '32px', height: '32px', borderRadius: '8px',
-              background: 'linear-gradient(135deg, #00d4ff, #8b5cf6)',
+              width: '36px', height: '36px', borderRadius: '50%',
+              background: 'radial-gradient(circle at 35% 25%, #fff3b0, #d69e2e 38%, #050810 70%)',
+              border: '1px solid rgba(247,215,116,0.65)',
+              boxShadow: '0 0 18px rgba(247,215,116,0.18)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ color: 'white', fontWeight: 900, fontSize: '14px' }}>D</span>
+              <span style={{ color: '#090806', fontWeight: 900, fontSize: '13px', letterSpacing: '-0.04em' }}>21K</span>
             </div>
-            <span style={{
-              fontWeight: 900, fontSize: '18px',
-              background: 'linear-gradient(135deg, #00d4ff, #8b5cf6)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-            }}>DevPackAI</span>
           </a>
 
           <nav className="desktop-nav" style={{ alignItems: 'center', gap: '32px' }}>
@@ -75,7 +72,7 @@ function Nav() {
         </div>
       </div>
 
-      <div className={`mobile-menu ${open ? 'open' : ''}`} style={{ background: '#0d1117', borderTop: '1px solid rgba(0,212,255,0.1)' }}>
+      <div className={`mobile-menu ${open ? 'open' : ''}`} style={{ background: '#0d1117', borderTop: '1px solid rgba(247,215,116,0.12)' }}>
         <nav style={{ display: 'flex', flexDirection: 'column', padding: '16px', gap: '16px' }}>
           <a href="/#resources" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>Resources</a>
           <a href="/#whats-inside" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>What's Inside</a>
@@ -91,24 +88,29 @@ function Nav() {
 
 function Footer() {
   return (
-    <footer style={{ borderTop: '1px solid rgba(0,212,255,0.1)', background: '#050810', padding: '48px 16px' }}>
+    <footer style={{ borderTop: '1px solid rgba(247,215,116,0.12)', background: '#050810', padding: '48px 16px' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '32px', marginBottom: '40px' }}>
           <div style={{ gridColumn: 'span 2' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <div style={{
-                width: '32px', height: '32px', borderRadius: '8px',
-                background: 'linear-gradient(135deg, #00d4ff, #8b5cf6)',
+                width: '36px', height: '36px', borderRadius: '50%',
+                background: 'radial-gradient(circle at 35% 25%, #fff3b0, #d69e2e 38%, #050810 70%)',
+                border: '1px solid rgba(247,215,116,0.65)',
+                boxShadow: '0 0 18px rgba(247,215,116,0.18)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ color: 'white', fontWeight: 900, fontSize: '14px' }}>D</span>
+                <span style={{ color: '#090806', fontWeight: 900, fontSize: '13px', letterSpacing: '-0.04em' }}>21K</span>
               </div>
               <span style={{
                 fontWeight: 900, fontSize: '18px',
-                background: 'linear-gradient(135deg, #00d4ff, #8b5cf6)',
+                background: 'linear-gradient(135deg, #fff3b0, #f7d774, #b7791f)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>DevPackAI</span>
+              }}>21k</span>
             </div>
+            <p style={{ color: '#94a3b8', fontSize: '13px', fontWeight: 700, margin: '0 0 8px' }}>
+              Build. Learn. Earn.
+            </p>
             <p style={{ color: '#475569', fontSize: '14px', lineHeight: 1.6, maxWidth: '300px', margin: '0 0 12px' }}>
               Premium curated AI developer resources, tools, prompts, and guides organized in one pack.
             </p>
@@ -135,13 +137,66 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div style={{ borderTop: '1px solid rgba(0,212,255,0.08)', paddingTop: '24px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-          <p style={{ color: '#334155', fontSize: '12px', margin: 0 }}>© 2026 DevPackAI. All rights reserved.</p>
+        <div style={{ borderTop: '1px solid rgba(247,215,116,0.1)', paddingTop: '24px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+          <p style={{ color: '#334155', fontSize: '12px', margin: 0 }}>© 2026 21k. All rights reserved.</p>
           <p style={{ color: '#1e293b', fontSize: '12px', margin: 0 }}>External resources belong to their respective owners.</p>
         </div>
       </div>
     </footer>
   )
+}
+
+function ScrollReveal() {
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const main = document.querySelector('main')
+    if (!main) return
+
+    const firstSection = main.querySelector('section')
+    const candidates = Array.from(
+      main.querySelectorAll<HTMLElement>('section, .card-glow'),
+    ).filter(element => element !== firstSection)
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      candidates.forEach(element => element.classList.add('reveal-visible', 'reveal-done'))
+      return
+    }
+
+    const completeReveal = (element: HTMLElement) => {
+      element.classList.add('reveal-visible')
+      window.setTimeout(() => {
+        element.classList.add('reveal-done')
+      }, window.innerWidth < 768 ? 420 : 760)
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return
+
+          const element = entry.target as HTMLElement
+          completeReveal(element)
+          observer.unobserve(element)
+        })
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+    )
+
+    candidates.forEach(element => {
+      element.classList.add('reveal-item')
+
+      if (element.getBoundingClientRect().top < window.innerHeight * 0.85) {
+        completeReveal(element)
+        return
+      }
+
+      observer.observe(element)
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
+  return null
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -163,6 +218,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <main style={{ paddingTop: '64px' }}>
           <Outlet />
         </main>
+        <ScrollReveal />
         <Footer />
         <Scripts />
       </body>
