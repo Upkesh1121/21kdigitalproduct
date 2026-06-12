@@ -1,4 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
+import { checkBuyerAccess } from '../lib/access'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -9,7 +11,7 @@ const DASH_SECTIONS = [
   { icon: '💬', title: 'Prompt Library', desc: 'Copy-paste prompts for every task', count: '30+' },
   { icon: '⚡', title: 'Setup Commands', desc: 'Terminal commands ready to paste', count: '50+' },
   { icon: '🗂️', title: 'Tool Guides', desc: 'Step-by-step setup walkthroughs', count: '10+' },
-  { icon: '📦', title: 'Download ZIP', desc: 'All files bundled for offline use', count: '1 ZIP' },
+  { icon: '📦', title: 'PDF Downloads', desc: 'Included guides for offline use', count: 'PDF' },
   { icon: '🔄', title: 'Updates', desc: 'New resources added regularly', count: 'Live' },
 ]
 
@@ -44,10 +46,10 @@ function DashboardPage() {
           <h1 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#f1f5f9', marginBottom: '8px' }}>
             AI Developer Dashboard
           </h1>
-          <p style={{ color: '#64748b' }}>Preview of what awaits after purchase</p>
+          <p style={{ color: '#64748b' }}>{accessGranted ? 'Your buyer dashboard is active' : 'Preview of what awaits after purchase'}</p>
         </div>
 
-        <div style={{ position: 'relative', filter: 'blur(2px)', pointerEvents: 'none', userSelect: 'none' }}>
+        <div style={{ position: 'relative', filter: accessGranted ? 'none' : 'blur(2px)', pointerEvents: accessGranted ? 'auto' : 'none', userSelect: accessGranted ? 'auto' : 'none' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '24px' }}>
             {DASH_SECTIONS.map(s => (
               <div key={s.title} style={{ background: '#0d1117', border: '1px solid rgba(247,215,116,0.12)', borderRadius: '12px', padding: '24px' }}>

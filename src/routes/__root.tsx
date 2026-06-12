@@ -7,7 +7,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: '21k — AI Developer Resource Pack' },
+      { title: '21k â€” AI Developer Resource Pack' },
       {
         name: 'description',
         content:
@@ -55,19 +55,16 @@ function Nav() {
               background: 'none', border: 'none', cursor: 'pointer',
               color: '#94a3b8', padding: '8px', display: 'none',
             }}
-            className="mobile-hamburger"
+            className={`mobile-hamburger hamburger-button ${open ? 'open' : ''}`}
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
+            aria-expanded={open}
           >
-            {open ? (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            ) : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 12h18M3 6h18M3 18h18"/>
-              </svg>
-            )}
+            <span className="hamburger-lines" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </button>
         </div>
       </div>
@@ -138,7 +135,7 @@ function Footer() {
           </div>
         </div>
         <div style={{ borderTop: '1px solid rgba(247,215,116,0.1)', paddingTop: '24px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-          <p style={{ color: '#334155', fontSize: '12px', margin: 0 }}>© 2026 21k. All rights reserved.</p>
+          <p style={{ color: '#334155', fontSize: '12px', margin: 0 }}>Â© 2026 21k. All rights reserved.</p>
           <p style={{ color: '#1e293b', fontSize: '12px', margin: 0 }}>External resources belong to their respective owners.</p>
         </div>
       </div>

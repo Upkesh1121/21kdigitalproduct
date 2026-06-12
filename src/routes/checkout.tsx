@@ -42,6 +42,8 @@ function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card')
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [coupon, setCoupon] = useState('')
   const [message, setMessage] = useState('')
 
@@ -53,15 +55,44 @@ function CheckoutPage() {
     return { valid: false, text: 'This code is not active yet.' }
   }, [coupon])
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setMessage('')
 
-    if (!name.trim() || !email.trim()) {
-      setMessage('Add your name and email so access can be delivered after payment.')
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setMessage('Add your name, email, and phone number so access can be delivered after payment.')
       return
     }
 
-    setMessage('Payment integration is coming soon. Buyer access code delivery is ready for the connected checkout flow.')
+    const phoneDigits = phone.replace(/\D/g, '').slice(-10)
+    if (phoneDigits.length !== 10) {
+      setMessage('Enter a valid 10 digit phone number for Cashfree checkout.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const orderResponse = await fetch('/api/create-cashfree-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone: phoneDigits }),
+      })
+
+      const orderData = await orderResponse.json()
+      if (!orderResponse.ok) throw new Error(orderData.error || 'Could not start payment.')
+      if (!orderData.payment_session_id) throw new Error('Cashfree did not return a payment session.')
+
+      await loadCashfreeSdk()
+      const cashfree = window.Cashfree({ mode: 'production' })
+      cashfree.checkout({
+        paymentSessionId: orderData.payment_session_id,
+        redirectTarget: '_self',
+      })
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Payment could not be started.')
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -231,6 +262,19 @@ function CheckoutPage() {
                   style={fieldStyle}
                 />
               </Field>
+
+              <Field label="Phone number" id="buyer-phone">
+                <input
+                  id="buyer-phone"
+                  className="checkout-field"
+                  type="tel"
+                  value={phone}
+                  onChange={event => setPhone(event.target.value)}
+                  placeholder="9876543210"
+                  autoComplete="tel"
+                  style={fieldStyle}
+                />
+              </Field>
             </div>
 
             <CheckoutSectionHeader
@@ -267,10 +311,10 @@ function CheckoutPage() {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#f7d774', fontWeight: 800, marginBottom: '8px' }}>
                 <Clock size={18} />
-                Checkout coming soon
+                Cashfree secure checkout
               </div>
               <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.65, margin: 0 }}>
-                The payment gateway is not connected yet. This page is ready for the live checkout flow and currently records no payment details.
+                Click continue to open Cashfree hosted checkout. Premium access unlocks only after Cashfree confirms a successful payment through the secure webhook.
               </p>
             </div>
 
@@ -309,6 +353,7 @@ function CheckoutPage() {
 
             <button
               type="submit"
+              disabled={isSubmitting}
               className="btn-primary checkout-action"
               style={{
                 width: '100%',
@@ -321,7 +366,7 @@ function CheckoutPage() {
               }}
             >
               <LockKeyhole size={18} />
-              Continue to Payment
+              {isSubmitting ? 'Starting Payment...' : 'Continue to Payment'}
             </button>
 
             {message ? (
@@ -560,3 +605,33 @@ const fieldStyle = {
   outline: 'none',
   boxSizing: 'border-box',
 } as const
+
+
+declare global {
+  interface Window {
+    Cashfree: (options: { mode: 'sandbox' | 'production' }) => {
+      checkout: (options: { paymentSessionId: string; redirectTarget: '_self' | '_blank' | '_top' | '_modal' }) => void
+    }
+  }
+}
+
+function loadCashfreeSdk() {
+  if (window.Cashfree) return Promise.resolve()
+
+  return new Promise<void>((resolve, reject) => {
+    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://sdk.cashfree.com/js/v3/cashfree.js"]')
+    if (existingScript) {
+      existingScript.addEventListener('load', () => resolve(), { once: true })
+      existingScript.addEventListener('error', () => reject(new Error('Could not load Cashfree checkout.')), { once: true })
+      return
+    }
+
+    const script = document.createElement('script')
+    script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js'
+    script.async = true
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error('Could not load Cashfree checkout.'))
+    document.head.appendChild(script)
+  })
+}
+

@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
+import { checkBuyerAccess } from '../lib/access'
 
 export const Route = createFileRoute('/resources')({
   component: ResourcesPage,
@@ -169,13 +170,12 @@ const RESOURCE_SECTIONS: Array<ResourceSection> = [
 ]
 
 const DOWNLOAD_FILES = [
-  '21k-ai-tools-links.md',
-  '21k-setup-commands.md',
-  '21k-prompt-library.md',
-  '21k-website-launch-checklist.md',
-  '21k-seo-checklist.md',
-  '21k-micro-tool-business-plan.md',
-  '21k-full-resource-pack.zip',
+  '21k-ai-tools-links.pdf',
+  '21k-setup-commands.pdf',
+  '21k-prompt-library.pdf',
+  '21k-website-launch-checklist.pdf',
+  '21k-seo-checklist.pdf',
+  '21k-micro-tool-business-plan.pdf',
 ]
 
 const ACCESS_STORAGE_KEY = '21k-resource-library-access'
@@ -203,22 +203,16 @@ function ResourcesPage() {
   const [accessMessage, setAccessMessage] = useState('')
 
   useEffect(() => {
-    setAccessGranted(window.localStorage.getItem(ACCESS_STORAGE_KEY) === 'granted')
+    checkBuyerAccess().then(result => {
+      setAccessGranted(result.has_access)
+      if (!result.has_access) window.localStorage.removeItem(ACCESS_STORAGE_KEY)
+    })
   }, [])
 
   const handleAccessSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const allowedCodes = getAllowedAccessCodes()
-    const enteredCode = normalizeCode(accessCode)
-
-    if (allowedCodes.includes(enteredCode)) {
-      window.localStorage.setItem(ACCESS_STORAGE_KEY, 'granted')
-      setAccessGranted(true)
-      setAccessMessage('')
-      return
-    }
-
-    setAccessMessage('Invalid or already-used access code. Check the code from your purchase email and try again.')
+    void accessCode
+    setAccessMessage('Use the secure magic link login. Access codes are disabled now that Supabase buyer verification is connected.')
   }
 
   if (!accessGranted) {
@@ -233,7 +227,7 @@ function ResourcesPage() {
               21k Resource Library
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '1rem', maxWidth: '590px', margin: '0 auto', lineHeight: 1.7 }}>
-              Your premium resources, setup notes, prompt files, and downloadable pack are available only after purchase.
+              Your premium resources, setup notes, prompts, and PDF downloads are available only after purchase.
             </p>
           </div>
 
@@ -246,13 +240,13 @@ function ResourcesPage() {
           }}>
             <form onSubmit={handleAccessSubmit}>
               <label style={{ display: 'block', color: '#e2e8f0', fontWeight: 800, marginBottom: '10px' }}>
-                Enter buyer access code
+                Buyer login required
               </label>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 <input
                   value={accessCode}
                   onChange={event => setAccessCode(event.target.value)}
-                  placeholder="21K-XXXX-XXXX"
+                  placeholder="Use Login to verify your buyer email"
                   style={{
                     flex: '1 1 240px',
                     background: '#111827',
@@ -265,7 +259,7 @@ function ResourcesPage() {
                   }}
                 />
                 <button type="submit" className="btn-primary" style={{ padding: '13px 22px' }}>
-                  Unlock Library
+                  Check Access
                 </button>
               </div>
               {accessMessage ? (
@@ -285,19 +279,19 @@ function ResourcesPage() {
               </h2>
               <div style={{ display: 'grid', gap: '10px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
                 <div><strong style={{ color: '#f7d774' }}>1.</strong> Complete payment from the checkout page.</div>
-                <div><strong style={{ color: '#f7d774' }}>2.</strong> Your unique 21k access code is shown after payment and sent to your mailbox.</div>
-                <div><strong style={{ color: '#f7d774' }}>3.</strong> Return here, enter the code, and unlock your buyer-only library.</div>
-                <div><strong style={{ color: '#f7d774' }}>4.</strong> Each buyer should receive a separate one-use code tied to their order/email.</div>
+                <div><strong style={{ color: '#f7d774' }}>2.</strong> Cashfree confirms payment through a secure webhook and your email is added to the buyer list.</div>
+                <div><strong style={{ color: '#f7d774' }}>3.</strong> Open the magic link from the login page to unlock your buyer-only library.</div>
+                <div><strong style={{ color: '#f7d774' }}>4.</strong> Access is tied to the buyer email stored in Supabase.</div>
               </div>
             </div>
 
             <p style={{ color: '#64748b', fontSize: '0.82rem', lineHeight: 1.6, margin: '18px 0 0' }}>
-              Note: this page is ready for access-code gating. True one-code-per-buyer validation and automatic email delivery require a payment provider, backend database, and email service integration.
+              Access is now checked against Supabase. If you already purchased, use the login page to receive a secure magic link.
             </p>
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '26px' }}>
-            <a href="/checkout" className="btn-secondary">Buy 21k Access</a>
+            <a href="/login" className="btn-secondary">Login with Buyer Email</a>
           </div>
         </div>
       </div>
@@ -332,7 +326,7 @@ function ResourcesPage() {
           flexWrap: 'wrap',
         }}>
           <span style={{ color: '#94a3b8', fontSize: '0.92rem' }}>
-            Locked premium access: full notes, checklists, commands, and downloadable files unlock for buyers.
+            Locked premium access: full notes, checklists, commands, and PDF files unlock for buyers.
           </span>
           <a href="/checkout" className="btn-primary" style={{ fontSize: '14px', padding: '10px 18px' }}>
             Unlock 21k
@@ -420,8 +414,8 @@ function ResourcesPage() {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '18px' }}>
             <div>
-              <h2 style={{ color: '#f1f5f9', fontSize: '1.25rem', fontWeight: 850, margin: '0 0 6px' }}>Downloadable Premium Files</h2>
-              <p style={{ color: '#64748b', margin: 0, fontSize: '0.92rem' }}>Included in the buyer pack for quick offline use.</p>
+              <h2 style={{ color: '#f1f5f9', fontSize: '1.25rem', fontWeight: 850, margin: '0 0 6px' }}>Downloadable PDF Files</h2>
+              <p style={{ color: '#64748b', margin: 0, fontSize: '0.92rem' }}>Only included PDF guides are available for download.</p>
             </div>
             <span className="badge badge-purple">Buyer Files</span>
           </div>

@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import type { FormEvent } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { checkBuyerAccess, saveSupabaseHashSession } from '../lib/access'
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -17,6 +18,22 @@ function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true)
   const [errors, setErrors] = useState<LoginErrors>({})
   const [statusMessage, setStatusMessage] = useState('')
+  const [isSendingLink, setIsSendingLink] = useState(false)
+
+  useEffect(() => {
+    const token = saveSupabaseHashSession()
+    if (!token) return
+
+    setStatusMessage('Checking your buyer access...')
+    checkBuyerAccess(token).then(result => {
+      if (result.has_access) {
+        window.location.href = '/dashboard'
+        return
+      }
+
+      setStatusMessage('Login worked, but this email does not have buyer access yet. Complete checkout first.')
+    })
+  }, [])
 
   const validate = (includePassword = true) => {
     const nextErrors: LoginErrors = {}
@@ -26,7 +43,7 @@ function LoginPage() {
     }
 
     if (includePassword && !password.trim()) {
-      nextErrors.password = 'Enter your password to continue.'
+      nextErrors.password = 'Use magic link to continue.'
     }
 
     setErrors(nextErrors)
@@ -37,17 +54,29 @@ function LoginPage() {
     event.preventDefault()
     setStatusMessage('')
 
-    if (!validate()) return
-
-    window.location.href = '/dashboard'
+    handleMagicLink()
   }
 
-  const handleMagicLink = () => {
+  const handleMagicLink = async () => {
     setStatusMessage('')
 
     if (!validate(false)) return
 
-    setStatusMessage('Magic link delivery is being connected. After purchase, buyers will receive an access link by email.')
+    setIsSendingLink(true)
+    try {
+      const response = await fetch('/api/send-magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Could not send login link.')
+      setStatusMessage('Check your email for the secure login link. Open it on this device to unlock your dashboard.')
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : 'Could not send login link.')
+    } finally {
+      setIsSendingLink(false)
+    }
   }
 
   return (
@@ -218,8 +247,8 @@ function LoginPage() {
             <p style={{ color: '#94a3b8', fontSize: '0.86rem', lineHeight: 1.55, margin: '0 0 12px' }}>
               Prefer email access? We&apos;ll send a secure login link to your inbox.
             </p>
-            <button type="button" className="btn-secondary login-action" onClick={handleMagicLink} style={{ width: '100%', textAlign: 'center', boxSizing: 'border-box' }}>
-              Send Magic Link
+            <button type="button" disabled={isSendingLink} className="btn-secondary login-action" onClick={handleMagicLink} style={{ width: '100%', textAlign: 'center', boxSizing: 'border-box' }}>
+              {isSendingLink ? 'Sending...' : 'Send Magic Link'}
             </button>
           </div>
 
@@ -239,7 +268,7 @@ function LoginPage() {
           ) : null}
 
           <div style={{ background: '#111827', border: '1px solid rgba(183,121,31,0.2)', borderRadius: '9px', padding: '14px', marginTop: '18px', color: '#64748b', fontSize: '0.84rem', lineHeight: 1.55 }}>
-            Login system is being connected. After purchase, buyers will receive an access link by email.
+            Secure login is connected with Supabase magic links. Only emails marked as buyers in Supabase can open the dashboard/resources.
           </div>
 
           <p style={{ color: '#94a3b8', fontSize: '0.9rem', textAlign: 'center', margin: '22px 0 0' }}>
@@ -257,3 +286,4 @@ function LoginPage() {
     </div>
   )
 }
+

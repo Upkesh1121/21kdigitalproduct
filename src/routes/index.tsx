@@ -128,7 +128,7 @@ function WhatsInsideSection() {
     { icon: '📈', title: 'SEO & Monetization', desc: 'AdSense, SEO tools, and micro-income strategies', color: '#10b981' },
     { icon: '💬', title: 'Prompt Templates', desc: 'Ready-to-use AI prompts for common tasks', color: '#f7d774' },
     { icon: '⚡', title: 'Setup Commands', desc: 'Copy-paste terminal commands for quick setup', color: '#f59e0b' },
-    { icon: '✅', title: 'Checklists & Downloads', desc: 'Launch checklists and downloadable ZIP files', color: '#b7791f' },
+    { icon: '✅', title: 'Checklists & PDFs', desc: 'Launch checklists and downloadable PDF guides', color: '#b7791f' },
   ]
 
   return (
@@ -229,7 +229,7 @@ function PremiumPackSection() {
     'Video companion links (third-party)',
     'Website launch checklist',
     'SEO monetization checklist',
-    'Downloadable ZIP with all files',
+    'PDF downloads for included guides',
     'Future updates included',
   ]
 
@@ -314,7 +314,7 @@ function PricingSection() {
           <p style={{ color: '#475569', fontSize: '0.875rem', margin: 0 }}>⚡ Instant access after purchase</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '28px', textAlign: 'left' }}>
-            {['100+ curated resources', 'Prompt library', 'Setup commands', 'Tool setup guides', 'Download ZIP', 'Future updates'].map(f => (
+            {['100+ curated resources', 'Prompt library', 'Setup commands', 'Tool setup guides', 'PDF downloads', 'Future updates'].map(f => (
               <div key={f} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <span style={{ color: '#10b981' }}>✓</span>
                 <span style={{ color: '#94a3b8', fontSize: '0.875rem' }}>{f}</span>
@@ -332,7 +332,7 @@ function DashboardPreviewSection() {
     { icon: '📚', title: 'Resource Library', desc: '100+ categorized links' },
     { icon: '💬', title: 'Prompt Library', desc: '30+ copy-paste prompts' },
     { icon: '⚡', title: 'Setup Commands', desc: 'Terminal commands ready' },
-    { icon: '📦', title: 'Download ZIP', desc: 'All files in one download' },
+    { icon: '📦', title: 'PDF Downloads', desc: 'Included guides as PDFs' },
     { icon: '🔄', title: 'Updates', desc: 'New resources added' },
     { icon: '🔒', title: 'Buyer-Only Access', desc: 'Secure member portal' },
   ]
@@ -406,7 +406,7 @@ function DashboardPreviewSection() {
 }
 
 const FAQ_ITEMS = [
-  { q: 'What do I get after purchase?', a: 'You get immediate access to 100+ curated AI developer resources including tool links, setup commands, prompt templates, checklists, and a downloadable ZIP file — all organized in a private buyer dashboard.' },
+  { q: 'What do I get after purchase?', a: 'You get immediate access to 100+ curated AI developer resources including tool links, setup commands, prompt templates, checklists, and downloadable PDF guides where included — all organized in a private buyer dashboard.' },
   { q: 'Are these resources original?', a: 'The pack includes 21k notes, checklists, and prompt templates created for this pack, plus curated links to official third-party tools and documentation. External links are labeled as Official Tool, Documentation, Reference Tutorial, Video Reference, or GitHub Repo.' },
   { q: 'Do I need coding experience?', a: 'Basic familiarity with the command line helps, but most resources include step-by-step guidance. The pack covers beginner-friendly setup guides as well as advanced tool configurations.' },
   { q: 'Will links be updated?', a: 'Yes. The pack includes future updates at no extra cost. As tools evolve and new resources are added, buyers receive access to updated versions.' },
