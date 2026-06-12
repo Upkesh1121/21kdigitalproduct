@@ -4,6 +4,14 @@ import { onRequest as apiRequest } from './api/[[path]].js'
 export async function onRequest(context) {
   const url = new URL(context.request.url)
 
+  if (
+    url.pathname.startsWith('/assets/') ||
+    url.pathname === '/favicon.ico' ||
+    url.pathname.startsWith('/placeholder')
+  ) {
+    return context.next()
+  }
+
   if (url.pathname.startsWith('/api/')) {
     const apiPath = url.pathname.replace(/^\/api\/?/, '')
 
