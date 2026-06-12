@@ -1,4 +1,5 @@
-﻿import { onRequestPost as createCashfreeOrderPost } from './create-cashfree-order.js'
+﻿import * as createCashfreeOrder from './create-cashfree-order.js'
+import { onRequestPost as createCashfreeOrderPost } from './create-cashfree-order.js'
 import { onRequestPost as cashfreeWebhookPost } from './cashfree-webhook.js'
 import { onRequestGet as checkAccessGet } from './check-access.js'
 import { onRequestPost as sendMagicLinkPost } from './send-magic-link.js'
@@ -17,7 +18,12 @@ export async function onRequest(context) {
   if (path === 'cashfree-webhook' && method === 'POST') return cashfreeWebhookPost(context)
   if (path === 'check-access' && method === 'GET') return checkAccessGet(context)
   if (path === 'send-magic-link' && method === 'POST') return sendMagicLinkPost(context)
-
+if (path === 'create-cashfree-order') {
+  if (context.request.method === 'POST') {
+    return createCashfreeOrder.onRequestPost(context)
+  }
+  return createCashfreeOrder.onRequestGet(context)
+}
   if (
     ['create-cashfree-order', 'cashfree-webhook', 'check-access', 'send-magic-link'].includes(path)
   ) {
