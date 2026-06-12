@@ -1,5 +1,6 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
+import { c as checkBuyerAccess } from "./access-EPv09c6N.js";
 const TYPE_COLORS = {
   "Official Tool": "#f7d774",
   "Documentation": "#b7791f",
@@ -304,33 +305,21 @@ const RESOURCE_SECTIONS = [{
     type: "Video Reference"
   }]
 }];
-const DOWNLOAD_FILES = ["21k-ai-tools-links.md", "21k-setup-commands.md", "21k-prompt-library.md", "21k-website-launch-checklist.md", "21k-seo-checklist.md", "21k-micro-tool-business-plan.md", "21k-full-resource-pack.zip"];
+const DOWNLOAD_FILES = ["21k-ai-tools-links.pdf", "21k-setup-commands.pdf", "21k-prompt-library.pdf", "21k-website-launch-checklist.pdf", "21k-seo-checklist.pdf", "21k-micro-tool-business-plan.pdf"];
 const ACCESS_STORAGE_KEY = "21k-resource-library-access";
-function normalizeCode(code) {
-  return code.trim().toUpperCase();
-}
-function getAllowedAccessCodes() {
-  const configuredCodes = "".split(",").map(normalizeCode).filter(Boolean);
-  return configuredCodes;
-}
 function ResourcesPage() {
   const [accessGranted, setAccessGranted] = useState(false);
   const [accessCode, setAccessCode] = useState("");
   const [accessMessage, setAccessMessage] = useState("");
   useEffect(() => {
-    setAccessGranted(window.localStorage.getItem(ACCESS_STORAGE_KEY) === "granted");
+    checkBuyerAccess().then((result) => {
+      setAccessGranted(result.has_access);
+      if (!result.has_access) window.localStorage.removeItem(ACCESS_STORAGE_KEY);
+    });
   }, []);
   const handleAccessSubmit = (event) => {
     event.preventDefault();
-    const allowedCodes = getAllowedAccessCodes();
-    const enteredCode = normalizeCode(accessCode);
-    if (allowedCodes.includes(enteredCode)) {
-      window.localStorage.setItem(ACCESS_STORAGE_KEY, "granted");
-      setAccessGranted(true);
-      setAccessMessage("");
-      return;
-    }
-    setAccessMessage("Invalid or already-used access code. Check the code from your purchase email and try again.");
+    setAccessMessage("Use the secure magic link login. Access codes are disabled now that Supabase buyer verification is connected.");
   };
   if (!accessGranted) {
     return /* @__PURE__ */ jsx("div", { style: {
@@ -361,7 +350,7 @@ function ResourcesPage() {
           maxWidth: "590px",
           margin: "0 auto",
           lineHeight: 1.7
-        }, children: "Your premium resources, setup notes, prompt files, and downloadable pack are available only after purchase." })
+        }, children: "Your premium resources, setup notes, prompts, and PDF downloads are available only after purchase." })
       ] }),
       /* @__PURE__ */ jsxs("div", { style: {
         background: "linear-gradient(135deg, rgba(247,215,116,0.05), rgba(183,121,31,0.06))",
@@ -376,13 +365,13 @@ function ResourcesPage() {
             color: "#e2e8f0",
             fontWeight: 800,
             marginBottom: "10px"
-          }, children: "Enter buyer access code" }),
+          }, children: "Buyer login required" }),
           /* @__PURE__ */ jsxs("div", { style: {
             display: "flex",
             gap: "10px",
             flexWrap: "wrap"
           }, children: [
-            /* @__PURE__ */ jsx("input", { value: accessCode, onChange: (event) => setAccessCode(event.target.value), placeholder: "21K-XXXX-XXXX", style: {
+            /* @__PURE__ */ jsx("input", { value: accessCode, onChange: (event) => setAccessCode(event.target.value), placeholder: "Use Login to verify your buyer email", style: {
               flex: "1 1 240px",
               background: "#111827",
               border: "1px solid rgba(247,215,116,0.25)",
@@ -394,7 +383,7 @@ function ResourcesPage() {
             } }),
             /* @__PURE__ */ jsx("button", { type: "submit", className: "btn-primary", style: {
               padding: "13px 22px"
-            }, children: "Unlock Library" })
+            }, children: "Check Access" })
           ] }),
           accessMessage ? /* @__PURE__ */ jsx("p", { style: {
             color: "#f87171",
@@ -432,19 +421,19 @@ function ResourcesPage() {
               /* @__PURE__ */ jsx("strong", { style: {
                 color: "#f7d774"
               }, children: "2." }),
-              " Your unique 21k access code is shown after payment and sent to your mailbox."
+              " Cashfree confirms payment through a secure webhook and your email is added to the buyer list."
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsx("strong", { style: {
                 color: "#f7d774"
               }, children: "3." }),
-              " Return here, enter the code, and unlock your buyer-only library."
+              " Open the magic link from the login page to unlock your buyer-only library."
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsx("strong", { style: {
                 color: "#f7d774"
               }, children: "4." }),
-              " Each buyer should receive a separate one-use code tied to their order/email."
+              " Access is tied to the buyer email stored in Supabase."
             ] })
           ] })
         ] }),
@@ -453,12 +442,12 @@ function ResourcesPage() {
           fontSize: "0.82rem",
           lineHeight: 1.6,
           margin: "18px 0 0"
-        }, children: "Note: this page is ready for access-code gating. True one-code-per-buyer validation and automatic email delivery require a payment provider, backend database, and email service integration." })
+        }, children: "Access is now checked against Supabase. If you already purchased, use the login page to receive a secure magic link." })
       ] }),
       /* @__PURE__ */ jsx("div", { style: {
         textAlign: "center",
         marginTop: "26px"
-      }, children: /* @__PURE__ */ jsx("a", { href: "/checkout", className: "btn-secondary", children: "Buy 21k Access" }) })
+      }, children: /* @__PURE__ */ jsx("a", { href: "/login", className: "btn-secondary", children: "Login with Buyer Email" }) })
     ] }) });
   }
   return /* @__PURE__ */ jsx("div", { style: {
@@ -506,7 +495,7 @@ function ResourcesPage() {
       /* @__PURE__ */ jsx("span", { style: {
         color: "#94a3b8",
         fontSize: "0.92rem"
-      }, children: "Locked premium access: full notes, checklists, commands, and downloadable files unlock for buyers." }),
+      }, children: "Locked premium access: full notes, checklists, commands, and PDF files unlock for buyers." }),
       /* @__PURE__ */ jsx("a", { href: "/checkout", className: "btn-primary", style: {
         fontSize: "14px",
         padding: "10px 18px"
@@ -621,12 +610,12 @@ function ResourcesPage() {
             fontSize: "1.25rem",
             fontWeight: 850,
             margin: "0 0 6px"
-          }, children: "Downloadable Premium Files" }),
+          }, children: "Downloadable PDF Files" }),
           /* @__PURE__ */ jsx("p", { style: {
             color: "#64748b",
             margin: 0,
             fontSize: "0.92rem"
-          }, children: "Included in the buyer pack for quick offline use." })
+          }, children: "Only included PDF guides are available for download." })
         ] }),
         /* @__PURE__ */ jsx("span", { className: "badge badge-purple", children: "Buyer Files" })
       ] }),

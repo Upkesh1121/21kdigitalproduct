@@ -6,7 +6,7 @@ const Route$6 = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "21k — AI Developer Resource Pack" },
+      { title: "21k â€” AI Developer Resource Pack" },
       {
         name: "description",
         content: "21k AI Developer Resource Pack for builders who want to build, learn, and earn with AI coding workflows."
@@ -50,10 +50,15 @@ function Nav() {
             padding: "8px",
             display: "none"
           },
-          className: "mobile-hamburger",
+          className: `mobile-hamburger hamburger-button ${open ? "open" : ""}`,
           onClick: () => setOpen(!open),
           "aria-label": "Toggle menu",
-          children: open ? /* @__PURE__ */ jsx("svg", { width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: /* @__PURE__ */ jsx("path", { d: "M18 6L6 18M6 6l12 12" }) }) : /* @__PURE__ */ jsx("svg", { width: "24", height: "24", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: /* @__PURE__ */ jsx("path", { d: "M3 12h18M3 6h18M3 18h18" }) })
+          "aria-expanded": open,
+          children: /* @__PURE__ */ jsxs("span", { className: "hamburger-lines", "aria-hidden": "true", children: [
+            /* @__PURE__ */ jsx("span", {}),
+            /* @__PURE__ */ jsx("span", {}),
+            /* @__PURE__ */ jsx("span", {})
+          ] })
         }
       )
     ] }) }),
@@ -116,7 +121,7 @@ function Footer() {
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { style: { borderTop: "1px solid rgba(247,215,116,0.1)", paddingTop: "24px", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "12px" }, children: [
-      /* @__PURE__ */ jsx("p", { style: { color: "#334155", fontSize: "12px", margin: 0 }, children: "© 2026 21k. All rights reserved." }),
+      /* @__PURE__ */ jsx("p", { style: { color: "#334155", fontSize: "12px", margin: 0 }, children: "Â© 2026 21k. All rights reserved." }),
       /* @__PURE__ */ jsx("p", { style: { color: "#1e293b", fontSize: "12px", margin: 0 }, children: "External resources belong to their respective owners." })
     ] })
   ] }) });
@@ -185,23 +190,23 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
-const $$splitComponentImporter$5 = () => import("./resources-C3jsk5vi.js");
+const $$splitComponentImporter$5 = () => import("./resources-Cv5EhDMC.js");
 const Route$5 = createFileRoute("/resources")({
   component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-const $$splitComponentImporter$4 = () => import("./login-CKqCdcnT.js");
+const $$splitComponentImporter$4 = () => import("./login-BxgJ95Ku.js");
 const Route$4 = createFileRoute("/login")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component")
 });
-const $$splitComponentImporter$3 = () => import("./dashboard-C_OZSmaL.js");
+const $$splitComponentImporter$3 = () => import("./dashboard-DYCRglPk.js");
 const Route$3 = createFileRoute("/dashboard")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-const $$splitComponentImporter$2 = () => import("./checkout-BRqXNLVq.js");
+const $$splitComponentImporter$2 = () => import("./checkout-CdUCf5hd.js");
 const Route$2 = createFileRoute("/checkout")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-const $$splitComponentImporter$1 = () => import("./index-DH-gO3V9.js");
+const $$splitComponentImporter$1 = () => import("./index-COo2q3Tc.js");
 const Route$1 = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
@@ -215,7 +220,7 @@ const products = [
     price: 3e3
   }
 ];
-const $$splitComponentImporter = () => import("./_productId-1bcproWk.js");
+const $$splitComponentImporter = () => import("./_productId-B2yGw5Ke.js");
 const Route = createFileRoute("/products/$productId")({
   component: lazyRouteComponent($$splitComponentImporter, "component"),
   loader: async ({

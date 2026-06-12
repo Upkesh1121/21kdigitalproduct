@@ -21,9 +21,9 @@ const DASH_SECTIONS = [{
   count: "10+"
 }, {
   icon: "📦",
-  title: "Download ZIP",
-  desc: "All files bundled for offline use",
-  count: "1 ZIP"
+  title: "PDF Downloads",
+  desc: "Included guides for offline use",
+  count: "PDF"
 }, {
   icon: "🔄",
   title: "Updates",
@@ -88,13 +88,13 @@ function DashboardPage() {
       }, children: "AI Developer Dashboard" }),
       /* @__PURE__ */ jsx("p", { style: {
         color: "#64748b"
-      }, children: "Preview of what awaits after purchase" })
+      }, children: accessGranted ? "Your buyer dashboard is active" : "Preview of what awaits after purchase" })
     ] }),
     /* @__PURE__ */ jsxs("div", { style: {
       position: "relative",
-      filter: "blur(2px)",
-      pointerEvents: "none",
-      userSelect: "none"
+      filter: accessGranted ? "none" : "blur(2px)",
+      pointerEvents: accessGranted ? "auto" : "none",
+      userSelect: accessGranted ? "auto" : "none"
     }, children: [
       /* @__PURE__ */ jsx("div", { style: {
         display: "grid",

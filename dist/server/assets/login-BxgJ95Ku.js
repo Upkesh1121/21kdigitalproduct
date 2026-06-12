@@ -1,18 +1,32 @@
 import { jsxs, jsx } from "react/jsx-runtime";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { s as saveSupabaseHashSession, c as checkBuyerAccess } from "./access-EPv09c6N.js";
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
   const [errors, setErrors] = useState({});
   const [statusMessage, setStatusMessage] = useState("");
+  const [isSendingLink, setIsSendingLink] = useState(false);
+  useEffect(() => {
+    const token = saveSupabaseHashSession();
+    if (!token) return;
+    setStatusMessage("Checking your buyer access...");
+    checkBuyerAccess(token).then((result) => {
+      if (result.has_access) {
+        window.location.href = "/dashboard";
+        return;
+      }
+      setStatusMessage("Login worked, but this email does not have buyer access yet. Complete checkout first.");
+    });
+  }, []);
   const validate = (includePassword = true) => {
     const nextErrors = {};
     if (!email.trim()) {
       nextErrors.email = "Enter the email address used for purchase.";
     }
     if (includePassword && !password.trim()) {
-      nextErrors.password = "Enter your password to continue.";
+      nextErrors.password = "Use magic link to continue.";
     }
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -20,13 +34,30 @@ function LoginPage() {
   const handleLogin = (event) => {
     event.preventDefault();
     setStatusMessage("");
-    if (!validate()) return;
-    window.location.href = "/dashboard";
+    handleMagicLink();
   };
-  const handleMagicLink = () => {
+  const handleMagicLink = async () => {
     setStatusMessage("");
     if (!validate(false)) return;
-    setStatusMessage("Magic link delivery is being connected. After purchase, buyers will receive an access link by email.");
+    setIsSendingLink(true);
+    try {
+      const response = await fetch("/api/send-magic-link", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not send login link.");
+      setStatusMessage("Check your email for the secure login link. Open it on this device to unlock your dashboard.");
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : "Could not send login link.");
+    } finally {
+      setIsSendingLink(false);
+    }
   };
   return /* @__PURE__ */ jsxs("div", { className: "cyber-grid", style: {
     background: "radial-gradient(circle at 20% 15%, rgba(247,215,116,0.09), transparent 30%), radial-gradient(circle at 80% 10%, rgba(183,121,31,0.1), transparent 34%), #050810",
@@ -224,11 +255,11 @@ function LoginPage() {
             lineHeight: 1.55,
             margin: "0 0 12px"
           }, children: "Prefer email access? We'll send a secure login link to your inbox." }),
-          /* @__PURE__ */ jsx("button", { type: "button", className: "btn-secondary login-action", onClick: handleMagicLink, style: {
+          /* @__PURE__ */ jsx("button", { type: "button", disabled: isSendingLink, className: "btn-secondary login-action", onClick: handleMagicLink, style: {
             width: "100%",
             textAlign: "center",
             boxSizing: "border-box"
-          }, children: "Send Magic Link" })
+          }, children: isSendingLink ? "Sending..." : "Send Magic Link" })
         ] }),
         statusMessage ? /* @__PURE__ */ jsx("div", { role: "status", style: {
           background: "rgba(247,215,116,0.06)",
@@ -249,7 +280,7 @@ function LoginPage() {
           color: "#64748b",
           fontSize: "0.84rem",
           lineHeight: 1.55
-        }, children: "Login system is being connected. After purchase, buyers will receive an access link by email." }),
+        }, children: "Secure login is connected with Supabase magic links. Only emails marked as buyers in Supabase can open the dashboard/resources." }),
         /* @__PURE__ */ jsxs("p", { style: {
           color: "#94a3b8",
           fontSize: "0.9rem",

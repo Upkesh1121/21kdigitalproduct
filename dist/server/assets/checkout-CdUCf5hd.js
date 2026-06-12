@@ -2,7 +2,7 @@ import { jsxs, jsx } from "react/jsx-runtime";
 import { ChevronLeft, ShieldCheck, CreditCard, WalletCards, Clock, LockKeyhole, Sparkles, Check, Mail, Download, BadgeCheck } from "lucide-react";
 import { useState, useMemo } from "react";
 import { C as CountdownTimer } from "./CountdownTimer-BzbsmKR_.js";
-const INCLUDED_ITEMS = ["100+ curated AI developer resources", "30+ prompt templates and workflows", "Copy-paste setup commands", "Launch and monetization checklists", "Downloadable ZIP bundle", "Future resource updates included"];
+const INCLUDED_ITEMS = ["100+ curated AI developer resources", "30+ prompt templates and workflows", "Copy-paste setup commands", "Launch and monetization checklists", "PDF downloads for included guides", "Future resource updates included"];
 const DELIVERY_STEPS = [{
   icon: Mail,
   title: "Email receipt",
@@ -13,13 +13,15 @@ const DELIVERY_STEPS = [{
   text: "Use your code to unlock dashboard resources."
 }, {
   icon: Download,
-  title: "Download pack",
-  text: "Open the library and download the full ZIP."
+  title: "PDF downloads",
+  text: "Download only the included PDF guides from the library."
 }];
 function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [coupon, setCoupon] = useState("");
   const [message, setMessage] = useState("");
   const couponStatus = useMemo(() => {
@@ -35,13 +37,46 @@ function CheckoutPage() {
       text: "This code is not active yet."
     };
   }, [coupon]);
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!name.trim() || !email.trim()) {
-      setMessage("Add your name and email so access can be delivered after payment.");
+    setMessage("");
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setMessage("Add your name, email, and phone number so access can be delivered after payment.");
       return;
     }
-    setMessage("Payment integration is coming soon. Buyer access code delivery is ready for the connected checkout flow.");
+    const phoneDigits = phone.replace(/\D/g, "").slice(-10);
+    if (phoneDigits.length !== 10) {
+      setMessage("Enter a valid 10 digit phone number for Cashfree checkout.");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const orderResponse = await fetch("/api/create-cashfree-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone: phoneDigits
+        })
+      });
+      const orderData = await orderResponse.json();
+      if (!orderResponse.ok) throw new Error(orderData.error || "Could not start payment.");
+      if (!orderData.payment_session_id) throw new Error("Cashfree did not return a payment session.");
+      await loadCashfreeSdk();
+      const cashfree = window.Cashfree({
+        mode: "production"
+      });
+      cashfree.checkout({
+        paymentSessionId: orderData.payment_session_id,
+        redirectTarget: "_self"
+      });
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Payment could not be started.");
+      setIsSubmitting(false);
+    }
   };
   return /* @__PURE__ */ jsxs("div", { className: "cyber-grid", style: {
     background: "radial-gradient(circle at 12% 10%, rgba(247,215,116,0.09), transparent 28%), radial-gradient(circle at 86% 18%, rgba(16,185,129,0.08), transparent 30%), #050810",
@@ -131,7 +166,7 @@ function CheckoutPage() {
             fontSize: "1.05rem",
             lineHeight: 1.7,
             margin: 0
-          }, children: "Lifetime access to the curated AI developer resource pack, delivered through the buyer dashboard." })
+          }, children: "Lifetime access to the curated AI developer resource pack, delivered through the buyer dashboard with PDF downloads only where included." })
         ] }),
         /* @__PURE__ */ jsxs("div", { style: {
           display: "inline-flex",
@@ -171,7 +206,8 @@ function CheckoutPage() {
             marginBottom: "28px"
           }, children: [
             /* @__PURE__ */ jsx(Field, { label: "Full name", id: "buyer-name", children: /* @__PURE__ */ jsx("input", { id: "buyer-name", className: "checkout-field", value: name, onChange: (event) => setName(event.target.value), placeholder: "Your name", autoComplete: "name", style: fieldStyle }) }),
-            /* @__PURE__ */ jsx(Field, { label: "Email address", id: "buyer-email", children: /* @__PURE__ */ jsx("input", { id: "buyer-email", className: "checkout-field", type: "email", value: email, onChange: (event) => setEmail(event.target.value), placeholder: "you@example.com", autoComplete: "email", style: fieldStyle }) })
+            /* @__PURE__ */ jsx(Field, { label: "Email address", id: "buyer-email", children: /* @__PURE__ */ jsx("input", { id: "buyer-email", className: "checkout-field", type: "email", value: email, onChange: (event) => setEmail(event.target.value), placeholder: "you@example.com", autoComplete: "email", style: fieldStyle }) }),
+            /* @__PURE__ */ jsx(Field, { label: "Phone number", id: "buyer-phone", children: /* @__PURE__ */ jsx("input", { id: "buyer-phone", className: "checkout-field", type: "tel", value: phone, onChange: (event) => setPhone(event.target.value), placeholder: "9876543210", autoComplete: "tel", style: fieldStyle }) })
           ] }),
           /* @__PURE__ */ jsx(CheckoutSectionHeader, { kicker: "Step 2", title: "Payment Method", text: "Choose how you want to pay once the live payment provider is connected." }),
           /* @__PURE__ */ jsxs("div", { style: {
@@ -199,14 +235,14 @@ function CheckoutPage() {
               marginBottom: "8px"
             }, children: [
               /* @__PURE__ */ jsx(Clock, { size: 18 }),
-              "Checkout coming soon"
+              "Cashfree secure checkout"
             ] }),
             /* @__PURE__ */ jsx("p", { style: {
               color: "#94a3b8",
               fontSize: "0.9rem",
               lineHeight: 1.65,
               margin: 0
-            }, children: "The payment gateway is not connected yet. This page is ready for the live checkout flow and currently records no payment details." })
+            }, children: "Click continue to open Cashfree hosted checkout. Premium access unlocks only after Cashfree confirms a successful payment through the secure webhook." })
           ] }),
           /* @__PURE__ */ jsx(CheckoutSectionHeader, { kicker: "Step 3", title: "Offer Code", text: "Launch discount is already included in the order total." }),
           /* @__PURE__ */ jsxs("div", { style: {
@@ -231,7 +267,7 @@ function CheckoutPage() {
           }, children: couponStatus.text }) : /* @__PURE__ */ jsx("div", { style: {
             marginBottom: "24px"
           } }),
-          /* @__PURE__ */ jsxs("button", { type: "submit", className: "btn-primary checkout-action", style: {
+          /* @__PURE__ */ jsxs("button", { type: "submit", disabled: isSubmitting, className: "btn-primary checkout-action", style: {
             width: "100%",
             display: "flex",
             justifyContent: "center",
@@ -241,7 +277,7 @@ function CheckoutPage() {
             fontSize: "16px"
           }, children: [
             /* @__PURE__ */ jsx(LockKeyhole, { size: 18 }),
-            "Continue to Payment"
+            isSubmitting ? "Starting Payment..." : "Continue to Payment"
           ] }),
           message ? /* @__PURE__ */ jsx("div", { role: "status", style: {
             background: "rgba(247,215,116,0.07)",
@@ -290,7 +326,7 @@ function CheckoutPage() {
             fontSize: "0.9rem",
             lineHeight: 1.6,
             margin: "0 0 20px"
-          }, children: "Organized links, commands, prompts, and launch templates for AI-powered development." }),
+          }, children: "Organized links, commands, prompts, launch templates, and downloadable PDFs for AI-powered development." }),
           /* @__PURE__ */ jsxs("div", { className: "checkout-price-row", style: {
             display: "flex",
             alignItems: "flex-end",
@@ -520,6 +556,27 @@ const fieldStyle = {
   outline: "none",
   boxSizing: "border-box"
 };
+function loadCashfreeSdk() {
+  if (window.Cashfree) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const existingScript = document.querySelector('script[src="https://sdk.cashfree.com/js/v3/cashfree.js"]');
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(), {
+        once: true
+      });
+      existingScript.addEventListener("error", () => reject(new Error("Could not load Cashfree checkout.")), {
+        once: true
+      });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Could not load Cashfree checkout."));
+    document.head.appendChild(script);
+  });
+}
 export {
   CheckoutPage as component
 };

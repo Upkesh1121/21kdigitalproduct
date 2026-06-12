@@ -237,8 +237,8 @@ function WhatsInsideSection() {
     color: "#f59e0b"
   }, {
     icon: "✅",
-    title: "Checklists & Downloads",
-    desc: "Launch checklists and downloadable ZIP files",
+    title: "Checklists & PDFs",
+    desc: "Launch checklists and downloadable PDF guides",
     color: "#b7791f"
   }];
   return /* @__PURE__ */ jsx("section", { id: "whats-inside", className: "cyber-grid", style: {
@@ -452,7 +452,7 @@ function ResourcePreviewSection() {
   ] }) });
 }
 function PremiumPackSection() {
-  const includes = ["100+ curated and verified resource links", "Copy-paste terminal setup commands", "Prompt template library (30+ prompts)", "Tool setup guides with instructions", "Official documentation references", "Video companion links (third-party)", "Website launch checklist", "SEO monetization checklist", "Downloadable ZIP with all files", "Future updates included"];
+  const includes = ["100+ curated and verified resource links", "Copy-paste terminal setup commands", "Prompt template library (30+ prompts)", "Tool setup guides with instructions", "Official documentation references", "Video companion links (third-party)", "Website launch checklist", "SEO monetization checklist", "PDF downloads for included guides", "Future updates included"];
   return /* @__PURE__ */ jsx("section", { style: {
     background: "#050810",
     padding: "96px 16px"
@@ -639,7 +639,7 @@ function PricingSection() {
         gap: "10px",
         marginTop: "28px",
         textAlign: "left"
-      }, children: ["100+ curated resources", "Prompt library", "Setup commands", "Tool setup guides", "Download ZIP", "Future updates"].map((f) => /* @__PURE__ */ jsxs("div", { style: {
+      }, children: ["100+ curated resources", "Prompt library", "Setup commands", "Tool setup guides", "PDF downloads", "Future updates"].map((f) => /* @__PURE__ */ jsxs("div", { style: {
         display: "flex",
         gap: "8px",
         alignItems: "center"
@@ -670,8 +670,8 @@ function DashboardPreviewSection() {
     desc: "Terminal commands ready"
   }, {
     icon: "📦",
-    title: "Download ZIP",
-    desc: "All files in one download"
+    title: "PDF Downloads",
+    desc: "Included guides as PDFs"
   }, {
     icon: "🔄",
     title: "Updates",
@@ -842,7 +842,7 @@ function DashboardPreviewSection() {
 }
 const FAQ_ITEMS = [{
   q: "What do I get after purchase?",
-  a: "You get immediate access to 100+ curated AI developer resources including tool links, setup commands, prompt templates, checklists, and a downloadable ZIP file — all organized in a private buyer dashboard."
+  a: "You get immediate access to 100+ curated AI developer resources including tool links, setup commands, prompt templates, checklists, and downloadable PDF guides where included — all organized in a private buyer dashboard."
 }, {
   q: "Are these resources original?",
   a: "The pack includes 21k notes, checklists, and prompt templates created for this pack, plus curated links to official third-party tools and documentation. External links are labeled as Official Tool, Documentation, Reference Tutorial, Video Reference, or GitHub Repo."
