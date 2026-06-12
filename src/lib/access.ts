@@ -1,4 +1,6 @@
-﻿export const ACCESS_TOKEN_KEY = '21k-supabase-access-token'
+import { readApiJson } from './api'
+
+export const ACCESS_TOKEN_KEY = '21k-supabase-access-token'
 
 export function saveSupabaseHashSession() {
   if (typeof window === 'undefined' || !window.location.hash) return null
@@ -32,5 +34,5 @@ export async function checkBuyerAccess(token = getAccessToken()) {
   })
 
   if (!response.ok) return { has_access: false, email: null, role: null }
-  return response.json() as Promise<{ has_access: boolean; email: string | null; role: string | null }>
+  return readApiJson<{ has_access: boolean; email: string | null; role: string | null }>(response, '/api/check-access')
 }

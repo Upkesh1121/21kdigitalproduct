@@ -16,6 +16,7 @@ import {
 import type { FormEvent } from 'react'
 import { useMemo, useState } from 'react'
 import { CountdownTimer } from '../components/CountdownTimer'
+import { readApiJson } from '../lib/api'
 
 export const Route = createFileRoute('/checkout')({
   component: CheckoutPage,
@@ -79,7 +80,7 @@ function CheckoutPage() {
         body: JSON.stringify({ name, email, phone: phoneDigits }),
       })
 
-      const orderData = await orderResponse.json()
+      const orderData = await readApiJson<{ error?: string; payment_session_id?: string }>(orderResponse, '/api/create-cashfree-order')
       if (!orderResponse.ok) throw new Error(orderData.error || 'Could not start payment.')
       if (!orderData.payment_session_id) throw new Error('Cashfree did not return a payment session.')
 
@@ -634,4 +635,3 @@ function loadCashfreeSdk() {
     document.head.appendChild(script)
   })
 }
-

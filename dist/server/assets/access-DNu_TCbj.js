@@ -1,3 +1,4 @@
+import { r as readApiJson } from "./api-CWR5F0Sv.js";
 const ACCESS_TOKEN_KEY = "21k-supabase-access-token";
 function saveSupabaseHashSession() {
   if (typeof window === "undefined" || !window.location.hash) return null;
@@ -18,7 +19,7 @@ async function checkBuyerAccess(token = getAccessToken()) {
     headers: { authorization: `Bearer ${token}` }
   });
   if (!response.ok) return { has_access: false, email: null, role: null };
-  return response.json();
+  return readApiJson(response, "/api/check-access");
 }
 export {
   checkBuyerAccess as c,

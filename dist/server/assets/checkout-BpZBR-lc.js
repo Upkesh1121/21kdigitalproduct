@@ -2,6 +2,7 @@ import { jsxs, jsx } from "react/jsx-runtime";
 import { ChevronLeft, ShieldCheck, CreditCard, WalletCards, Clock, LockKeyhole, Sparkles, Check, Mail, Download, BadgeCheck } from "lucide-react";
 import { useState, useMemo } from "react";
 import { C as CountdownTimer } from "./CountdownTimer-BzbsmKR_.js";
+import { r as readApiJson } from "./api-CWR5F0Sv.js";
 const INCLUDED_ITEMS = ["100+ curated AI developer resources", "30+ prompt templates and workflows", "Copy-paste setup commands", "Launch and monetization checklists", "PDF downloads for included guides", "Future resource updates included"];
 const DELIVERY_STEPS = [{
   icon: Mail,
@@ -62,7 +63,7 @@ function CheckoutPage() {
           phone: phoneDigits
         })
       });
-      const orderData = await orderResponse.json();
+      const orderData = await readApiJson(orderResponse, "/api/create-cashfree-order");
       if (!orderResponse.ok) throw new Error(orderData.error || "Could not start payment.");
       if (!orderData.payment_session_id) throw new Error("Cashfree did not return a payment session.");
       await loadCashfreeSdk();

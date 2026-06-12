@@ -190,11 +190,11 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
-const $$splitComponentImporter$5 = () => import("./resources-Cv5EhDMC.js");
+const $$splitComponentImporter$5 = () => import("./resources-B1tA4f7l.js");
 const Route$5 = createFileRoute("/resources")({
   component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-const $$splitComponentImporter$4 = () => import("./login-BxgJ95Ku.js");
+const $$splitComponentImporter$4 = () => import("./login-CEylEBke.js");
 const Route$4 = createFileRoute("/login")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component")
 });
@@ -202,7 +202,7 @@ const $$splitComponentImporter$3 = () => import("./dashboard-DYCRglPk.js");
 const Route$3 = createFileRoute("/dashboard")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-const $$splitComponentImporter$2 = () => import("./checkout-CdUCf5hd.js");
+const $$splitComponentImporter$2 = () => import("./checkout-BpZBR-lc.js");
 const Route$2 = createFileRoute("/checkout")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
@@ -220,7 +220,7 @@ const products = [
     price: 3e3
   }
 ];
-const $$splitComponentImporter = () => import("./_productId-B2yGw5Ke.js");
+const $$splitComponentImporter = () => import("./_productId-BLWoWMKB.js");
 const Route = createFileRoute("/products/$productId")({
   component: lazyRouteComponent($$splitComponentImporter, "component"),
   loader: async ({

@@ -1,6 +1,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
-import { c as checkBuyerAccess } from "./access-EPv09c6N.js";
+import { c as checkBuyerAccess } from "./access-DNu_TCbj.js";
+import "./api-CWR5F0Sv.js";
 const TYPE_COLORS = {
   "Official Tool": "#f7d774",
   "Documentation": "#b7791f",

@@ -1,0 +1,1 @@
+async function r(t,n){if((t.headers.get("content-type")||"").includes("application/json"))return t.json();const e=(await t.text()).replace(/\s+/g," ").slice(0,120),o=e.toLowerCase().includes("<!doctype")||e.toLowerCase().includes("<html")?" It returned website HTML instead of API JSON.":"";throw new Error(`${n} returned ${t.status||"a"} non-JSON response.${o}`)}export{r};

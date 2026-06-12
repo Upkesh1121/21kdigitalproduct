@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 import { checkBuyerAccess, saveSupabaseHashSession } from '../lib/access'
+import { readApiJson } from '../lib/api'
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -69,7 +70,7 @@ function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
-      const data = await response.json()
+      const data = await readApiJson<{ error?: string }>(response, '/api/send-magic-link')
       if (!response.ok) throw new Error(data.error || 'Could not send login link.')
       setStatusMessage('Check your email for the secure login link. Open it on this device to unlock your dashboard.')
     } catch (error) {
@@ -286,4 +287,3 @@ function LoginPage() {
     </div>
   )
 }
-

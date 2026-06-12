@@ -1,6 +1,7 @@
 import { jsxs, jsx } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
-import { s as saveSupabaseHashSession, c as checkBuyerAccess } from "./access-EPv09c6N.js";
+import { s as saveSupabaseHashSession, c as checkBuyerAccess } from "./access-DNu_TCbj.js";
+import { r as readApiJson } from "./api-CWR5F0Sv.js";
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +51,7 @@ function LoginPage() {
           email
         })
       });
-      const data = await response.json();
+      const data = await readApiJson(response, "/api/send-magic-link");
       if (!response.ok) throw new Error(data.error || "Could not send login link.");
       setStatusMessage("Check your email for the secure login link. Open it on this device to unlock your dashboard.");
     } catch (error) {
