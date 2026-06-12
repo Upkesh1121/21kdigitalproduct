@@ -4,8 +4,9 @@ import { onRequest as apiRequest } from './api/[[path]].js'
 export async function onRequest(context) {
   const url = new URL(context.request.url)
 
-  if (url.pathname === '/api' || url.pathname.startsWith('/api/')) {
+  if (url.pathname.startsWith('/api/')) {
     const apiPath = url.pathname.replace(/^\/api\/?/, '')
+
     return apiRequest({
       ...context,
       params: {
