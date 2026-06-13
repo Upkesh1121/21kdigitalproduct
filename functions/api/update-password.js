@@ -1,4 +1,4 @@
-import { json, requireConfig } from '../_shared.js'
+import { json, requireConfig, supabaseProjectUrl } from '../_shared.js'
 
 const getBearerToken = (request) => {
   const header = request.headers.get('authorization') || ''
@@ -16,7 +16,7 @@ export async function onRequestPost({ request, env }) {
     if (!token) return json({ error: 'Reset session is missing. Open the latest reset email again.' }, 401)
     if (password.length < 8) return json({ error: 'Password must be at least 8 characters.' }, 400)
 
-    const response = await fetch(`${env.SUPABASE_URL.replace(/\/$/, '')}/auth/v1/user`, {
+    const response = await fetch(`${supabaseProjectUrl(env)}/auth/v1/user`, {
       method: 'PUT',
       headers: {
         apikey: env.SUPABASE_PUBLISHABLE_KEY,

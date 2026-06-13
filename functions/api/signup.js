@@ -1,10 +1,10 @@
-import { json, normalizeEmail, requireConfig, supabaseHeaders, supabaseRestUrl, upsertBuyer } from '../_shared.js'
+import { json, normalizeEmail, requireConfig, supabaseProjectUrl, upsertBuyer } from '../_shared.js'
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 const cleanText = (value) => String(value || '').trim()
 
-const supabaseAuthUrl = (env, path) => `${env.SUPABASE_URL.replace(/\/$/, '')}/auth/v1/${path}`
+const supabaseAuthUrl = (env, path) => `${supabaseProjectUrl(env)}/auth/v1/${path}`
 
 async function createSupabaseUser(env, { email, password, fullName, phone }) {
   const response = await fetch(supabaseAuthUrl(env, 'admin/users'), {

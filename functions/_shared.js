@@ -12,6 +12,8 @@ export const siteUrl = (env) => getEnv(env, 'SITE_URL', 'https://21k.in').replac
 
 export const loginRedirectUrl = (env) => `${siteUrl(env)}/login`
 
+export const supabaseProjectUrl = (env) => getEnv(env, 'SUPABASE_URL', 'https://ifycttfwpbtvrlsnzpee.supabase.co').replace(/\/$/, '')
+
 export const safeNextPath = (value, fallback = '/resources') => {
   const next = String(value || '').trim()
   if (!next || !next.startsWith('/') || next.startsWith('//')) return fallback
@@ -32,13 +34,13 @@ export const cashfreeHeaders = (env) => ({
 })
 
 export const requireConfig = (env, names) => {
-  const missing = names.filter((name) => !env[name])
+  const missing = names.filter((name) => !env[name] && name !== 'SUPABASE_URL' && name !== 'SITE_URL')
   if (missing.length) throw new Error(`Missing environment variables: ${missing.join(', ')}`)
 }
 
 export const normalizeEmail = (email) => String(email || '').trim().toLowerCase()
 
-export const supabaseRestUrl = (env, table) => `${getEnv(env, 'SUPABASE_URL').replace(/\/$/, '')}/rest/v1/${table}`
+export const supabaseRestUrl = (env, table) => `${supabaseProjectUrl(env)}/rest/v1/${table}`
 
 export const supabaseHeaders = (env, prefer) => {
   const headers = {

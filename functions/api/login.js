@@ -1,4 +1,4 @@
-import { json, normalizeEmail, requireConfig } from '../_shared.js'
+import { json, normalizeEmail, requireConfig, supabaseProjectUrl } from '../_shared.js'
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
@@ -13,7 +13,7 @@ export async function onRequestPost({ request, env }) {
     if (!isValidEmail(email)) return json({ error: 'Enter a valid email address.' }, 400)
     if (!password) return json({ error: 'Enter your password.' }, 400)
 
-    const response = await fetch(`${env.SUPABASE_URL.replace(/\/$/, '')}/auth/v1/token?grant_type=password`, {
+    const response = await fetch(`${supabaseProjectUrl(env)}/auth/v1/token?grant_type=password`, {
       method: 'POST',
       headers: {
         apikey: env.SUPABASE_PUBLISHABLE_KEY,

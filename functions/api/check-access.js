@@ -1,4 +1,4 @@
-﻿import { json, requireConfig, supabaseHeaders, supabaseRestUrl } from '../_shared.js'
+﻿import { json, requireConfig, supabaseHeaders, supabaseProjectUrl, supabaseRestUrl } from '../_shared.js'
 
 const getAdminEmails = (env) => {
   const configured = `${env.ADMIN_EMAIL || ''},${env.ADMIN_EMAILS || ''}`
@@ -14,7 +14,7 @@ const getBearerToken = (request) => {
 }
 
 const getUser = async (env, token) => {
-  const supabaseUrl = env.SUPABASE_URL.replace(/\/$/, '')
+  const supabaseUrl = supabaseProjectUrl(env)
   const authResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
     headers: {
       apikey: env.SUPABASE_PUBLISHABLE_KEY,

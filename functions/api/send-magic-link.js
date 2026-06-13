@@ -1,4 +1,4 @@
-import { json, normalizeEmail, requireConfig, safeNextPath, siteUrl } from '../_shared.js'
+import { json, normalizeEmail, requireConfig, safeNextPath, siteUrl, supabaseProjectUrl } from '../_shared.js'
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
@@ -11,7 +11,7 @@ async function handlePost({ request, env }) {
     if (!isValidEmail(email)) return json({ error: 'Enter a valid email address.' }, 400)
 
     const next = safeNextPath(body.next)
-    const supabaseUrl = env.SUPABASE_URL.replace(/\/$/, '')
+    const supabaseUrl = supabaseProjectUrl(env)
     const redirectTo = `${siteUrl(env)}/login?next=${encodeURIComponent(next)}`
 
     if (/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i.test(redirectTo)) {

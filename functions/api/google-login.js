@@ -1,4 +1,4 @@
-import { loginRedirectUrl, requireConfig, safeNextPath } from '../_shared.js'
+import { loginRedirectUrl, requireConfig, safeNextPath, supabaseProjectUrl } from '../_shared.js'
 
 export async function onRequestGet({ request, env }) {
   try {
@@ -12,7 +12,7 @@ export async function onRequestGet({ request, env }) {
       return Response.json({ error: 'SITE_URL is set to localhost. Set SITE_URL=https://21k.in in Cloudflare.' }, { status: 500 })
     }
 
-    const supabaseUrl = env.SUPABASE_URL.replace(/\/$/, '')
+    const supabaseUrl = supabaseProjectUrl(env)
     const authUrl = new URL(`${supabaseUrl}/auth/v1/authorize`)
     authUrl.searchParams.set('provider', 'google')
     authUrl.searchParams.set('redirect_to', redirectTo)
