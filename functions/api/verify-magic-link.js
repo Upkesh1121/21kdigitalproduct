@@ -1,4 +1,4 @@
-import { json, requireConfig, supabaseProjectUrl } from '../_shared.js'
+import { json, requireConfig, supabaseClientKey, supabaseProjectUrl } from '../_shared.js'
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -11,11 +11,12 @@ export async function onRequestPost({ request, env }) {
     if (!tokenHash) return json({ error: 'Missing login token.' }, 400)
 
     const supabaseUrl = supabaseProjectUrl(env)
+    const clientKey = supabaseClientKey(env)
     const supabaseResponse = await fetch(`${supabaseUrl}/auth/v1/verify`, {
       method: 'POST',
       headers: {
-        apikey: env.SUPABASE_PUBLISHABLE_KEY,
-        authorization: `Bearer ${env.SUPABASE_PUBLISHABLE_KEY}`,
+        apikey: clientKey,
+        authorization: `Bearer ${clientKey}`,
         'content-type': 'application/json',
       },
       body: JSON.stringify({ token_hash: tokenHash, type }),

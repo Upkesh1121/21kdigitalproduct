@@ -1,4 +1,4 @@
-import { json, normalizeEmail, requireConfig, safeNextPath, siteUrl, supabaseProjectUrl } from '../_shared.js'
+import { json, normalizeEmail, requireConfig, safeNextPath, siteUrl, supabaseClientKey, supabaseProjectUrl } from '../_shared.js'
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
@@ -12,6 +12,7 @@ async function handlePost({ request, env }) {
 
     const next = safeNextPath(body.next)
     const supabaseUrl = supabaseProjectUrl(env)
+    const clientKey = supabaseClientKey(env)
     const redirectTo = `${siteUrl(env)}/login?next=${encodeURIComponent(next)}`
 
     if (/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i.test(redirectTo)) {
@@ -21,8 +22,8 @@ async function handlePost({ request, env }) {
     const supabaseResponse = await fetch(`${supabaseUrl}/auth/v1/otp?redirect_to=${encodeURIComponent(redirectTo)}`, {
       method: 'POST',
       headers: {
-        apikey: env.SUPABASE_PUBLISHABLE_KEY,
-        authorization: `Bearer ${env.SUPABASE_PUBLISHABLE_KEY}`,
+        apikey: clientKey,
+        authorization: `Bearer ${clientKey}`,
         'content-type': 'application/json',
       },
       body: JSON.stringify({ email, create_user: false }),

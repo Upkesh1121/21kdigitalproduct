@@ -1,4 +1,4 @@
-import { json, normalizeEmail, requireConfig, siteUrl, supabaseProjectUrl } from '../_shared.js'
+import { json, normalizeEmail, requireConfig, siteUrl, supabaseClientKey, supabaseProjectUrl } from '../_shared.js'
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
@@ -11,11 +11,12 @@ export async function onRequestPost({ request, env }) {
     if (!isValidEmail(email)) return json({ error: 'Enter a valid email address.' }, 400)
 
     const redirectTo = `${siteUrl(env)}/reset-password`
+    const clientKey = supabaseClientKey(env)
     const response = await fetch(`${supabaseProjectUrl(env)}/auth/v1/recover?redirect_to=${encodeURIComponent(redirectTo)}`, {
       method: 'POST',
       headers: {
-        apikey: env.SUPABASE_PUBLISHABLE_KEY,
-        authorization: `Bearer ${env.SUPABASE_PUBLISHABLE_KEY}`,
+        apikey: clientKey,
+        authorization: `Bearer ${clientKey}`,
         'content-type': 'application/json',
       },
       body: JSON.stringify({ email }),
