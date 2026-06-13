@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your 21k Login Link</title>
+  </head>
+  <body style="margin:0;padding:0;background:#050810;font-family:Arial,Helvetica,sans-serif;color:#e2e8f0">
+    <div style="display:none;max-height:0;overflow:hidden;color:transparent">
+      Use this secure one-time link to access your 21k buyer account.
+    </div>
+
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#050810;padding:32px 14px">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#0d1117;border:1px solid #3b2f18;border-radius:14px;overflow:hidden">
+            <tr>
+              <td style="padding:30px 30px 18px;background:#080b12;border-bottom:1px solid #2b2416">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td>
+                      <div style="display:inline-block;background:#f7d774;color:#090806;font-weight:900;font-size:18px;letter-spacing:.2px;border-radius:10px;padding:10px 14px">
+                        21k
+                      </div>
+                    </td>
+                    <td align="right" style="color:#8b98ad;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px">
+                      Buyer Access
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:32px 30px 8px">
+                <h1 style="margin:0;color:#f8fafc;font-size:28px;line-height:1.18;font-weight:900">
+                  Sign in to your 21k account
+                </h1>
+                <p style="margin:14px 0 0;color:#a8b3c5;font-size:15px;line-height:1.65">
+                  We received a request to sign in to the 21k AI Developer Resource Pack. Use the secure button below to continue.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:24px 30px 8px">
+                <a href="{{ .ConfirmationURL }}" style="display:block;text-align:center;background:#f7d774;color:#090806;text-decoration:none;font-weight:900;border-radius:10px;padding:16px 18px;font-size:15px">
+                  Sign In Securely
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:14px 30px 10px">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#111827;border:1px solid #273244;border-radius:10px">
+                  <tr>
+                    <td style="padding:16px 18px;color:#94a3b8;font-size:13px;line-height:1.6">
+                      This is a one-time login link. For your security, do not forward this email. If you did not request it, you can safely ignore it.
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:12px 30px 30px">
+                <p style="margin:0 0 8px;color:#64748b;font-size:12px;line-height:1.6">
+                  Button not working? Copy and paste this link into your browser:
+                </p>
+                <p style="margin:0;word-break:break-all;color:#f7d774;font-size:12px;line-height:1.6">
+                  {{ .ConfirmationURL }}
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:20px 30px;background:#080b12;border-top:1px solid #2b2416;color:#64748b;font-size:12px;line-height:1.6">
+                21k AI Developer Resource Pack<br />
+                Private buyer dashboard access for purchased resources.
+              </td>
+            </tr>
+          </table>
+
+          <p style="max-width:600px;margin:18px auto 0;color:#475569;font-size:11px;line-height:1.55">
+            You are receiving this because a login link was requested for your email on 21k.in.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

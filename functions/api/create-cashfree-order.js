@@ -55,6 +55,7 @@ export async function onRequestPost({ request, env }) {
     return json({
       order_id: cashfreeData.order_id || orderId,
       payment_session_id: cashfreeData.payment_session_id,
+      cashfree_mode: env.CASHFREE_ENV === 'sandbox' ? 'sandbox' : 'production',
     })
   } catch (error) {
     return json({ error: error.message }, 500)

@@ -32,7 +32,7 @@ Utility classes: `.gradient-text`, `.card-glow`, `.btn-primary`, `.btn-secondary
 
 ## Project Overview
 
-An interactive resume/portfolio application with an AI-powered assistant. Built with TanStack Start and deployed on Netlify.
+Interactive 21k product site built with TanStack Start and deployed on Cloudflare Pages.
 
 ### Tech Stack
 
@@ -46,7 +46,7 @@ An interactive resume/portfolio application with an AI-powered assistant. Built 
 | Content | Content Collections (type-safe markdown) |
 | AI | TanStack AI with multi-provider support |
 | Language | TypeScript 5.7 (strict mode) |
-| Deployment | Netlify |
+| Deployment | Cloudflare Pages |
 
 ## Directory Structure
 
@@ -79,11 +79,12 @@ An interactive resume/portfolio application with an AI-powered assistant. Built 
 │   └── styles.css  # Global styles.
 ├── .gitignore  # Template for .gitignore: node_modules, dist, .env, .netlify, .tanstack, etc.
 ├── AGENTS.md  # This document provides an overview of the project structure for developers and AI agents working on this codebase.
-├── netlify.toml  # Netlify deployment config: build command (vite build), publish directory (dist/client), and dev server settings (port 8888, target 3000).
-├── package.json  # Project manifest with TanStack Start, React 19, Vite 7, Tailwind CSS 4, and Netlify plugin dependencies; defines dev and build scripts.
+├── wrangler.toml  # Cloudflare Pages config: output directory and runtime compatibility.
+├── CLOUDFLARE_DEPLOY.md  # Cloudflare deployment and environment variable notes.
+├── package.json  # Project manifest with TanStack Start, React 19, Vite 7, and Tailwind CSS 4; defines dev and build scripts.
 ├── pnpm-lock.yaml
 ├── tsconfig.json  # TypeScript config: ES2022 target, strict mode, @/* path alias for src/*, bundler module resolution.
-└── vite.config.ts  # Vite config template: TanStack Start, React, Tailwind, Netlify plugin, and optional add-on integrations; processed by EJS.
+└── vite.config.ts  # Vite config: TanStack Start, React, Tailwind, and path aliases.
 ```
 
 ## Key Concepts
@@ -109,9 +110,9 @@ Routes are defined by files in `src/routes/`:
 
 | File | Purpose |
 |------|---------|
-| `vite.config.ts` | Vite plugins: TanStack Start, Netlify, Tailwind, Content Collections |
+| `vite.config.ts` | Vite plugins: TanStack Start, React, Tailwind, path aliases |
 | `tsconfig.json` | TypeScript config with `@/*` path alias for `src/*` |
-| `netlify.toml` | Build command, output directory, dev server settings |
+| `wrangler.toml` | Cloudflare Pages output directory and compatibility settings |
 | `content-collections.ts` | Zod schemas for jobs and education frontmatter |
 | `styles.css` | Tailwind imports + CSS custom properties (oklch colors) |
 

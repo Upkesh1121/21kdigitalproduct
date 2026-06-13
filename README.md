@@ -1,6 +1,6 @@
 # 21k — AI Developer Resource Pack
 
-A premium landing page and buyer-access product built with TanStack Start, React, and Tailwind CSS v4, deployed on Netlify.
+A premium landing page and buyer-access product built with TanStack Start, React, Tailwind CSS v4, and Cloudflare Pages Functions.
 
 ## What It Is
 
@@ -10,7 +10,7 @@ A premium landing page and buyer-access product built with TanStack Start, React
 
 - **TanStack Start** — React-based SSR framework with file-based routing
 - **Tailwind CSS v4** — Utility-first styling
-- **Netlify** — Hosting, edge functions, and deployment
+- **Cloudflare Pages** — Hosting, Pages Functions, and deployment
 - **TypeScript** — Full type safety
 
 ## Project Structure
@@ -22,9 +22,13 @@ src/
     index.tsx        # Main landing page (all sections)
     checkout.tsx     # Checkout placeholder
     login.tsx        # Login page placeholder
+    admin.tsx        # Admin access grant page
     dashboard.tsx    # Buyer dashboard preview
     resources.tsx    # Resource library preview
   styles.css         # Global styles and design tokens
+functions/
+  [[path]].js        # Cloudflare Pages catch-all for SSR and API routing
+  api/               # Payment, login, access, webhook, and admin APIs
 ```
 
 ## Running Locally
@@ -35,6 +39,18 @@ npm run dev
 ```
 
 Opens at http://localhost:3000
+
+## Deploying
+
+Deploy on Cloudflare Pages with:
+
+```text
+Build command: npm run build
+Build output directory: dist/client
+Functions directory: functions
+```
+
+See `CLOUDFLARE_DEPLOY.md` for required environment variables.
 
 ## Design
 

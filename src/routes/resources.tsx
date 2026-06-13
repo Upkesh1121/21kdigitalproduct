@@ -1,28 +1,27 @@
 import { createFileRoute } from '@tanstack/react-router'
-import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
-import { checkBuyerAccess } from '../lib/access'
+import { checkBuyerAccess, getAccessToken } from '../lib/access'
 
 export const Route = createFileRoute('/resources')({
   component: ResourcesPage,
 })
 
-type ResourceType = 'Official Tool' | 'Documentation' | 'Reference Tutorial' | 'Video Reference' | 'GitHub Repo'
+export type ResourceType = 'Official Tool' | 'Documentation' | 'Reference Tutorial' | 'Video Reference' | 'GitHub Repo'
 
-type Resource = {
+export type Resource = {
   title: string
   url: string
   type: ResourceType
 }
 
-type ResourceSection = {
+export type ResourceSection = {
   title: string
   description: string
   notes: string
   resources: Array<Resource>
 }
 
-const TYPE_COLORS: Record<ResourceType, string> = {
+export const TYPE_COLORS: Record<ResourceType, string> = {
   'Official Tool': '#f7d774',
   'Documentation': '#b7791f',
   'Reference Tutorial': '#f59e0b',
@@ -30,7 +29,7 @@ const TYPE_COLORS: Record<ResourceType, string> = {
   'GitHub Repo': '#10b981',
 }
 
-const RESOURCE_SECTIONS: Array<ResourceSection> = [
+export const RESOURCE_SECTIONS: Array<ResourceSection> = [
   {
     title: 'Claude Code & AI Coding',
     description:
@@ -169,7 +168,7 @@ const RESOURCE_SECTIONS: Array<ResourceSection> = [
   },
 ]
 
-const DOWNLOAD_FILES = [
+export const DOWNLOAD_FILES = [
   '21k-ai-tools-links.pdf',
   '21k-setup-commands.pdf',
   '21k-prompt-library.pdf',
@@ -178,44 +177,65 @@ const DOWNLOAD_FILES = [
   '21k-micro-tool-business-plan.pdf',
 ]
 
-const ACCESS_STORAGE_KEY = '21k-resource-library-access'
-
-function normalizeCode(code: string) {
-  return code.trim().toUpperCase()
-}
-
-function getAllowedAccessCodes() {
-  const configuredCodes = ((import.meta.env.VITE_21K_ACCESS_CODES as string | undefined) ?? '')
-    .split(',')
-    .map(normalizeCode)
-    .filter(Boolean)
-
-  if (import.meta.env.DEV) {
-    configuredCodes.push('21K-BUYER-DEMO')
-  }
-
-  return configuredCodes
+export function resourceSectionSlug(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 }
 
 function ResourcesPage() {
   const [accessGranted, setAccessGranted] = useState(false)
-  const [accessCode, setAccessCode] = useState('')
-  const [accessMessage, setAccessMessage] = useState('')
+  const [isCheckingAccess, setIsCheckingAccess] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
-    checkBuyerAccess().then(result => {
-      setAccessGranted(result.has_access)
-      if (!result.has_access) window.localStorage.removeItem(ACCESS_STORAGE_KEY)
-    })
+    let cancelled = false
+    const token = getAccessToken()
+    setIsLoggedIn(Boolean(token))
+
+    checkBuyerAccess(token)
+      .then(result => {
+        if (!cancelled) {
+          setAccessGranted(result.has_access)
+          setIsLoggedIn(Boolean(token && result.email))
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setAccessGranted(false)
+      })
+      .finally(() => {
+        if (!cancelled) setIsCheckingAccess(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
   }, [])
 
-  const handleAccessSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    void accessCode
-    setAccessMessage('Use the secure magic link login. Access codes are disabled now that Supabase buyer verification is connected.')
+  if (isCheckingAccess) {
+    return (
+      <div style={{ background: '#050810', minHeight: '100vh', padding: '96px 16px 60px' }}>
+        <div style={{ maxWidth: '780px', margin: '0 auto', textAlign: 'center' }}>
+          <div className="badge badge-cyan" style={{ display: 'inline-flex', marginBottom: '16px' }}>
+            Checking Access
+          </div>
+          <h1 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.75rem)', fontWeight: 900, color: '#f1f5f9', marginBottom: '12px' }}>
+            Opening your resource library
+          </h1>
+          <p style={{ color: '#94a3b8', fontSize: '1rem', maxWidth: '590px', margin: '0 auto', lineHeight: 1.7 }}>
+            Verifying your buyer email and purchase status.
+          </p>
+        </div>
+      </div>
+    )
   }
 
   if (!accessGranted) {
+    const primaryHref = isLoggedIn ? '/checkout' : '/login?next=/resources'
+    const primaryLabel = isLoggedIn ? 'Complete Payment' : 'Login to Continue'
+
     return (
       <div style={{ background: '#050810', minHeight: '100vh', padding: '96px 16px 60px' }}>
         <div style={{ maxWidth: '780px', margin: '0 auto' }}>
@@ -238,34 +258,20 @@ function ResourcesPage() {
             padding: '28px',
             boxShadow: '0 0 70px rgba(247,215,116,0.06)',
           }}>
-            <form onSubmit={handleAccessSubmit}>
-              <label style={{ display: 'block', color: '#e2e8f0', fontWeight: 800, marginBottom: '10px' }}>
-                Buyer login required
-              </label>
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <input
-                  value={accessCode}
-                  onChange={event => setAccessCode(event.target.value)}
-                  placeholder="Use Login to verify your buyer email"
-                  style={{
-                    flex: '1 1 240px',
-                    background: '#111827',
-                    border: '1px solid rgba(247,215,116,0.25)',
-                    borderRadius: '8px',
-                    padding: '13px 14px',
-                    color: '#e2e8f0',
-                    fontSize: '0.95rem',
-                    outline: 'none',
-                  }}
-                />
-                <button type="submit" className="btn-primary" style={{ padding: '13px 22px' }}>
-                  Check Access
-                </button>
+            <div>
+            <h2 style={{ color: '#f1f5f9', fontSize: '1.15rem', fontWeight: 900, margin: '0 0 8px' }}>
+                {isLoggedIn ? 'Complete payment for this account' : 'Sign in with your buyer account'}
+              </h2>
+              <p style={{ color: '#94a3b8', fontSize: '0.92rem', lineHeight: 1.7, margin: '0 0 18px' }}>
+                {isLoggedIn
+                  ? 'This account is logged in, but the library opens only after a verified 21k purchase with the same email.'
+                  : 'The library opens only for accounts with a verified 21k purchase. Login first, then complete payment if your account is not unlocked yet.'}
+              </p>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <a href={primaryHref} className="btn-primary" style={{ padding: '13px 22px' }}>{primaryLabel}</a>
+                {!isLoggedIn ? <a href="/signup" className="btn-secondary" style={{ padding: '13px 22px' }}>Create Account</a> : null}
               </div>
-              {accessMessage ? (
-                <p style={{ color: '#f87171', fontSize: '0.85rem', margin: '12px 0 0' }}>{accessMessage}</p>
-              ) : null}
-            </form>
+            </div>
 
             <div style={{
               marginTop: '24px',
@@ -278,20 +284,20 @@ function ResourcesPage() {
                 How buyer access works
               </h2>
               <div style={{ display: 'grid', gap: '10px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                <div><strong style={{ color: '#f7d774' }}>1.</strong> Complete payment from the checkout page.</div>
-                <div><strong style={{ color: '#f7d774' }}>2.</strong> Cashfree confirms payment through a secure webhook and your email is added to the buyer list.</div>
-                <div><strong style={{ color: '#f7d774' }}>3.</strong> Open the magic link from the login page to unlock your buyer-only library.</div>
-                <div><strong style={{ color: '#f7d774' }}>4.</strong> Access is tied to the buyer email stored in Supabase.</div>
+                <div><strong style={{ color: '#f7d774' }}>1.</strong> Create your 21k account with email, mobile number, and password.</div>
+                <div><strong style={{ color: '#f7d774' }}>2.</strong> Complete checkout through Cashfree using the same email.</div>
+                <div><strong style={{ color: '#f7d774' }}>3.</strong> Payment verification updates your buyer access automatically.</div>
+                <div><strong style={{ color: '#f7d774' }}>4.</strong> Login anytime to open your private resource library.</div>
               </div>
             </div>
 
             <p style={{ color: '#64748b', fontSize: '0.82rem', lineHeight: 1.6, margin: '18px 0 0' }}>
-              Access is now checked against Supabase. If you already purchased, use the login page to receive a secure magic link.
+              If you already purchased but the library is still locked, contact support with your payment email and order ID.
             </p>
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '26px' }}>
-            <a href="/login" className="btn-secondary">Login with Buyer Email</a>
+            <a href={primaryHref} className="btn-secondary">{primaryLabel}</a>
           </div>
         </div>
       </div>
@@ -326,12 +332,46 @@ function ResourcesPage() {
           flexWrap: 'wrap',
         }}>
           <span style={{ color: '#94a3b8', fontSize: '0.92rem' }}>
-            Locked premium access: full notes, checklists, commands, and PDF files unlock for buyers.
+            Your buyer access is active. Full notes, checklists, commands, and PDF files are available below.
           </span>
-          <a href="/checkout" className="btn-primary" style={{ fontSize: '14px', padding: '10px 18px' }}>
-            Unlock 21k
+          <a href="/dashboard" className="btn-primary" style={{ fontSize: '14px', padding: '10px 18px' }}>
+            Back to Dashboard
           </a>
         </div>
+
+        <section style={{ marginBottom: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '14px' }}>
+            {RESOURCE_SECTIONS.map(section => (
+              <a
+                key={section.title}
+                href={`/resources/${resourceSectionSlug(section.title)}`}
+                style={{
+                  background: '#0d1117',
+                  border: '1px solid rgba(247,215,116,0.12)',
+                  borderRadius: '12px',
+                  padding: '18px',
+                  color: '#e2e8f0',
+                  textDecoration: 'none',
+                  minHeight: '150px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '14px',
+                }}
+              >
+                <span>
+                  <span style={{ display: 'block', color: '#f8fafc', fontSize: '1rem', fontWeight: 900, lineHeight: 1.25, marginBottom: '8px' }}>
+                    {section.title}
+                  </span>
+                  <span style={{ display: 'block', color: '#64748b', fontSize: '0.84rem', lineHeight: 1.5 }}>
+                    {section.resources.length} resources and premium notes
+                  </span>
+                </span>
+                <span style={{ color: '#f7d774', fontSize: '0.82rem', fontWeight: 900 }}>Open Section</span>
+              </a>
+            ))}
+          </div>
+        </section>
 
         <div style={{ display: 'grid', gap: '18px' }}>
           {RESOURCE_SECTIONS.map(section => (
@@ -346,7 +386,7 @@ function ResourcesPage() {
                   <h2 style={{ color: '#f1f5f9', fontSize: '1.25rem', fontWeight: 850, margin: '0 0 8px' }}>{section.title}</h2>
                   <p style={{ color: '#94a3b8', lineHeight: 1.65, margin: 0, fontSize: '0.94rem' }}>{section.description}</p>
                 </div>
-                <span className="badge badge-lock" style={{ height: 'fit-content' }}>Premium</span>
+                <a href={`/resources/${resourceSectionSlug(section.title)}`} className="badge badge-lock" style={{ height: 'fit-content', textDecoration: 'none' }}>Open Page</a>
               </div>
 
               <div style={{

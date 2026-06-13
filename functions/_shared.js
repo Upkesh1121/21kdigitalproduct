@@ -10,6 +10,14 @@ export const getEnv = (env, name, fallback = '') => env[name] || fallback
 
 export const siteUrl = (env) => getEnv(env, 'SITE_URL', 'https://21k.in').replace(/\/$/, '')
 
+export const loginRedirectUrl = (env) => `${siteUrl(env)}/login`
+
+export const safeNextPath = (value, fallback = '/resources') => {
+  const next = String(value || '').trim()
+  if (!next || !next.startsWith('/') || next.startsWith('//')) return fallback
+  return next
+}
+
 export const cashfreeBaseUrl = (env) => {
   return getEnv(env, 'CASHFREE_ENV', 'production') === 'sandbox'
     ? 'https://sandbox.cashfree.com/pg'
@@ -69,11 +77,40 @@ export const updateOrder = async (env, orderId, patch) => {
   if (!response.ok) throw new Error(`Could not update order: ${await response.text()}`)
 }
 
-export const upsertBuyer = async (env, email, role = 'buyer') => {
+export const markLatestOrderPaidByEmail = async (env, email, cfPaymentId = null) => {
+  const normalizedEmail = normalizeEmail(email)
+  const response = await fetch(
+    `${supabaseRestUrl(env, 'orders')}?email=eq.${encodeURIComponent(normalizedEmail)}&order=created_at.desc&limit=1`,
+    { headers: supabaseHeaders(env) },
+  )
+  if (!response.ok) throw new Error(`Could not fetch latest order: ${await response.text()}`)
+
+  const rows = await response.json()
+  const latestOrder = rows[0]
+  if (!latestOrder?.order_id) return null
+
+  await updateOrder(env, latestOrder.order_id, {
+    status: 'paid',
+    cf_payment_id: cfPaymentId ? String(cfPaymentId) : latestOrder.cf_payment_id || null,
+  })
+
+  return latestOrder.order_id
+}
+
+export const upsertBuyer = async (env, email, role = 'buyer', hasAccess = true, profile = {}) => {
+  const payload = {
+    email: normalizeEmail(email),
+    has_access: hasAccess,
+    role,
+  }
+
+  if (profile.full_name) payload.full_name = String(profile.full_name).trim()
+  if (profile.phone) payload.phone = String(profile.phone).trim()
+
   const response = await fetch(`${supabaseRestUrl(env, 'buyers')}?on_conflict=email`, {
     method: 'POST',
     headers: supabaseHeaders(env, 'resolution=merge-duplicates'),
-    body: JSON.stringify({ email: normalizeEmail(email), has_access: true, role }),
+    body: JSON.stringify(payload),
   })
   if (!response.ok) throw new Error(`Could not upsert buyer: ${await response.text()}`)
 }

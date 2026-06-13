@@ -23,6 +23,7 @@ export const Route = createFileRoute('/checkout')({
 })
 
 type PaymentMethod = 'card' | 'upi'
+type CashfreeMode = 'sandbox' | 'production'
 
 const INCLUDED_ITEMS = [
   '100+ curated AI developer resources',
@@ -34,9 +35,9 @@ const INCLUDED_ITEMS = [
 ]
 
 const DELIVERY_STEPS = [
-  { icon: Mail, title: 'Email receipt', text: 'Purchase email receives the access link and code.' },
-  { icon: LockKeyhole, title: 'Buyer access', text: 'Use your code to unlock dashboard resources.' },
-  { icon: Download, title: 'PDF downloads', text: 'Download only the included PDF guides from the library.' },
+  { icon: Mail, title: 'Order confirmation', text: 'Your purchase email is matched with your buyer account.' },
+  { icon: LockKeyhole, title: 'Dashboard unlock', text: 'Access opens automatically after successful payment verification.' },
+  { icon: Download, title: 'Premium files', text: 'Included PDF guides and resources stay available in your library.' },
 ]
 
 function CheckoutPage() {
@@ -74,24 +75,33 @@ function CheckoutPage() {
     setIsSubmitting(true)
 
     try {
+      const controller = new AbortController()
+      const timeoutId = window.setTimeout(() => controller.abort(), 25000)
+
       const orderResponse = await fetch('/api/create-cashfree-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({ name, email, phone: phoneDigits }),
       })
+      window.clearTimeout(timeoutId)
 
-      const orderData = await readApiJson<{ error?: string; payment_session_id?: string }>(orderResponse, '/api/create-cashfree-order')
+      const orderData = await readApiJson<{ error?: string; payment_session_id?: string; cashfree_mode?: CashfreeMode }>(orderResponse, '/api/create-cashfree-order')
       if (!orderResponse.ok) throw new Error(orderData.error || 'Could not start payment.')
       if (!orderData.payment_session_id) throw new Error('Cashfree did not return a payment session.')
 
       await loadCashfreeSdk()
-      const cashfree = window.Cashfree({ mode: 'production' })
-      cashfree.checkout({
+      const cashfree = window.Cashfree({ mode: orderData.cashfree_mode || 'production' })
+      await cashfree.checkout({
         paymentSessionId: orderData.payment_session_id,
         redirectTarget: '_self',
       })
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Payment could not be started.')
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        setMessage('Payment server did not respond. Check Cloudflare environment variables and try again.')
+      } else {
+        setMessage(error instanceof Error ? error.message : 'Payment could not be started.')
+      }
       setIsSubmitting(false)
     }
   }
@@ -174,7 +184,7 @@ function CheckoutPage() {
         >
           <div style={{ maxWidth: '680px' }}>
             <div className="badge badge-cyan" style={{ display: 'inline-flex', marginBottom: '18px' }}>
-              Secure Checkout
+              Step 3: Payment
             </div>
             <h1
               style={{
@@ -185,10 +195,10 @@ function CheckoutPage() {
                 margin: '0 0 14px',
               }}
             >
-              Complete your <span className="gradient-text">21k Pack</span> order
+              Unlock your <span className="gradient-text">21k Pack</span>
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '1.05rem', lineHeight: 1.7, margin: 0 }}>
-              Lifetime access to the curated AI developer resource pack, delivered through the buyer dashboard with PDF downloads only where included.
+              Use the same email you signed up and logged in with. Payment unlocks the buyer dashboard for that email.
             </p>
           </div>
 
@@ -235,7 +245,7 @@ function CheckoutPage() {
             <CheckoutSectionHeader
               kicker="Step 1"
               title="Buyer Details"
-              text="Use the email where you want the access code and dashboard link delivered."
+              text="Use the same email as your 21k account so your dashboard unlocks correctly after payment."
             />
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '28px' }}>
@@ -281,7 +291,7 @@ function CheckoutPage() {
             <CheckoutSectionHeader
               kicker="Step 2"
               title="Payment Method"
-              text="Choose how you want to pay once the live payment provider is connected."
+              text="Choose a secure payment method. You will complete the transaction on Cashfree checkout."
             />
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '12px', marginBottom: '22px' }}>
@@ -315,7 +325,7 @@ function CheckoutPage() {
                 Cashfree secure checkout
               </div>
               <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.65, margin: 0 }}>
-                Click continue to open Cashfree hosted checkout. Premium access unlocks only after Cashfree confirms a successful payment through the secure webhook.
+                Continue to Cashfree's hosted checkout. Your 21k dashboard unlocks only after the payment is verified successfully.
               </p>
             </div>
 
@@ -611,7 +621,7 @@ const fieldStyle = {
 declare global {
   interface Window {
     Cashfree: (options: { mode: 'sandbox' | 'production' }) => {
-      checkout: (options: { paymentSessionId: string; redirectTarget: '_self' | '_blank' | '_top' | '_modal' }) => void
+      checkout: (options: { paymentSessionId: string; redirectTarget: '_self' | '_blank' | '_top' | '_modal' }) => Promise<void> | void
     }
   }
 }

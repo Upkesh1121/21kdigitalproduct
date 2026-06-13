@@ -1,0 +1,9 @@
+name = "21k-ai-developer-resource-pack"
+compatibility_date = "2026-06-12"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist/client"
+
+[vars]
+CASHFREE_ENV = "production"
+CASHFREE_API_VERSION = "2023-08-01"
+PRODUCT_PRICE = "199"

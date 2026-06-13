@@ -1,6 +1,13 @@
 import { readApiJson } from './api'
 
 export const ACCESS_TOKEN_KEY = '21k-supabase-access-token'
+export const REFRESH_TOKEN_KEY = '21k-supabase-refresh-token'
+
+export function saveSupabaseSession(accessToken: string, refreshToken?: string | null) {
+  if (typeof window === 'undefined') return
+  window.localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
+  if (refreshToken) window.localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
+}
 
 export function saveSupabaseHashSession() {
   if (typeof window === 'undefined' || !window.location.hash) return null
@@ -10,7 +17,7 @@ export function saveSupabaseHashSession() {
 
   if (!token) return null
 
-  window.localStorage.setItem(ACCESS_TOKEN_KEY, token)
+  saveSupabaseSession(token, params.get('refresh_token'))
   window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
   return token
 }
@@ -23,6 +30,7 @@ export function getAccessToken() {
 export function clearAccessToken() {
   if (typeof window !== 'undefined') {
     window.localStorage.removeItem(ACCESS_TOKEN_KEY)
+    window.localStorage.removeItem(REFRESH_TOKEN_KEY)
   }
 }
 

@@ -164,7 +164,7 @@ const PREVIEW_RESOURCES = [
   { title: 'Claude Code Alternatives', summary: 'Side-by-side comparison of Claude Code, Cline, Continue, and Cursor with pros/cons.', category: 'AI Coding Tools', link: 'https://docs.anthropic.com', linkLabel: 'Documentation' },
   { title: 'GitHub Student Pack Guide', summary: 'How to activate GitHub Student Developer Pack and claim all included tools.', category: 'GitHub & Copilot', link: 'https://education.github.com/pack', linkLabel: 'Official Tool' },
   { title: 'VS Code + Cline Setup', summary: 'Install Cline extension, connect to OpenRouter, and configure your first AI coding session.', category: 'VS Code Extensions', link: 'https://marketplace.visualstudio.com', linkLabel: 'Documentation' },
-  { title: 'Astro Website Launch Checklist', summary: 'Full checklist from Astro setup to Netlify deploy — with SEO meta tags included.', category: 'Checklists', link: 'https://astro.build', linkLabel: 'Reference Tutorial' },
+  { title: 'Astro Website Launch Checklist', summary: 'Full checklist from Astro setup to Cloudflare deploy, with SEO meta tags included.', category: 'Checklists', link: 'https://astro.build', linkLabel: 'Reference Tutorial' },
   { title: 'SEO + AdSense Micro Tool Plan', summary: 'Minimal viable content strategy to get AdSense approved on a new developer blog.', category: 'SEO & Monetization', link: '/checkout', linkLabel: 'Documentation' },
   { title: 'AI Prompt Library', summary: '30+ reusable prompts for coding, debugging, writing docs, and generating components.', category: 'Prompt Templates', link: '/checkout', linkLabel: 'Documentation' },
   { title: 'Full Resource Links Database', summary: '100+ verified and categorized links to official AI tools, docs, and video references.', category: 'All Categories', link: '/checkout', linkLabel: 'Documentation' },
@@ -362,7 +362,7 @@ function DashboardPreviewSection() {
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#f59e0b' }} />
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#10b981' }} />
             <div style={{ flex: 1, background: '#1e293b', borderRadius: '6px', padding: '4px 12px', marginLeft: '8px' }}>
-              <span style={{ color: '#475569', fontSize: '0.75rem' }}>21k.com/dashboard</span>
+              <span style={{ color: '#475569', fontSize: '0.75rem' }}>21k.in/dashboard</span>
             </div>
             <span className="badge badge-green" style={{ fontSize: '11px' }}>🔒 Secure</span>
           </div>
@@ -411,8 +411,8 @@ const FAQ_ITEMS = [
   { q: 'Do I need coding experience?', a: 'Basic familiarity with the command line helps, but most resources include step-by-step guidance. The pack covers beginner-friendly setup guides as well as advanced tool configurations.' },
   { q: 'Will links be updated?', a: 'Yes. The pack includes future updates at no extra cost. As tools evolve and new resources are added, buyers receive access to updated versions.' },
   { q: 'Is this a course or a resource pack?', a: 'It is a curated resource pack — not a course. You get organized links, commands, templates, and guides in a structured format, not video lessons or live coaching.' },
-  { q: 'How do I access the pack after payment?', a: 'After completing checkout you will receive an email with your login link. Use that to access your private dashboard where all resources are available.' },
-  { q: 'Can I use this to build my own website?', a: 'Yes! The pack includes website-building resources, Astro and Netlify setup guides, and an SEO launch checklist specifically for building and monetizing developer websites.' },
+  { q: 'How do I access the pack after payment?', a: 'Create your 21k account, complete payment with the same email, then login to open your private dashboard. Buyer access is verified automatically after successful payment.' },
+  { q: 'Can I use this to build my own website?', a: 'Yes! The pack includes website-building resources, Astro and Cloudflare setup guides, and an SEO launch checklist specifically for building and monetizing developer websites.' },
 ]
 
 function FaqSection() {

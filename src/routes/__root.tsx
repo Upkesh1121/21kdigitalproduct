@@ -7,7 +7,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: '21k â€” AI Developer Resource Pack' },
+      { title: '21k - AI Developer Resource Pack' },
       {
         name: 'description',
         content:
@@ -43,7 +43,9 @@ function Nav() {
             <a href="/#whats-inside" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>What's Inside</a>
             <a href="/#pricing" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Pricing</a>
             <a href="/#faq" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>FAQ</a>
+            <a href="/signup" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Signup</a>
             <a href="/login" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Login</a>
+            <a href="/admin" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Admin</a>
           </nav>
 
           <div className="desktop-nav" style={{ alignItems: 'center', gap: '12px' }}>
@@ -75,7 +77,9 @@ function Nav() {
           <a href="/#whats-inside" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>What's Inside</a>
           <a href="/#pricing" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>Pricing</a>
           <a href="/#faq" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>FAQ</a>
+          <a href="/signup" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>Signup</a>
           <a href="/login" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>Login</a>
+          <a href="/admin" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>Admin</a>
           <a href="/checkout" className="btn-primary" style={{ textAlign: 'center' }} onClick={() => setOpen(false)}>Get Pack</a>
         </nav>
       </div>
@@ -135,7 +139,7 @@ function Footer() {
           </div>
         </div>
         <div style={{ borderTop: '1px solid rgba(247,215,116,0.1)', paddingTop: '24px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-          <p style={{ color: '#334155', fontSize: '12px', margin: 0 }}>Â© 2026 21k. All rights reserved.</p>
+          <p style={{ color: '#334155', fontSize: '12px', margin: 0 }}>Copyright 2026 21k. All rights reserved.</p>
           <p style={{ color: '#1e293b', fontSize: '12px', margin: 0 }}>External resources belong to their respective owners.</p>
         </div>
       </div>

@@ -1,5 +1,13 @@
 ﻿import { json, requireConfig, supabaseHeaders, supabaseRestUrl } from '../_shared.js'
 
+const getAdminEmails = (env) => {
+  const configured = `${env.ADMIN_EMAIL || ''},${env.ADMIN_EMAILS || ''}`
+  return configured
+    .split(',')
+    .map(email => email.trim().toLowerCase())
+    .filter(Boolean)
+}
+
 const getBearerToken = (request) => {
   const header = request.headers.get('authorization') || ''
   return header.startsWith('Bearer ') ? header.slice('Bearer '.length).trim() : ''
@@ -26,6 +34,14 @@ export async function onRequestGet({ request, env }) {
     const user = await getUser(env, token)
     const email = user?.email?.toLowerCase()
     if (!email) return json({ has_access: false }, 401)
+
+    if (getAdminEmails(env).includes(email)) {
+      return json({
+        email,
+        has_access: true,
+        role: 'admin',
+      })
+    }
 
     const buyersResponse = await fetch(
       `${supabaseRestUrl(env, 'buyers')}?email=eq.${encodeURIComponent(email)}&select=email,has_access,role`,

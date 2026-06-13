@@ -328,7 +328,7 @@ const PREVIEW_RESOURCES = [{
   linkLabel: "Documentation"
 }, {
   title: "Astro Website Launch Checklist",
-  summary: "Full checklist from Astro setup to Netlify deploy — with SEO meta tags included.",
+  summary: "Full checklist from Astro setup to Cloudflare deploy, with SEO meta tags included.",
   category: "Checklists",
   link: "https://astro.build",
   linkLabel: "Reference Tutorial"
@@ -752,7 +752,7 @@ function DashboardPreviewSection() {
         }, children: /* @__PURE__ */ jsx("span", { style: {
           color: "#475569",
           fontSize: "0.75rem"
-        }, children: "21k.com/dashboard" }) }),
+        }, children: "21k.in/dashboard" }) }),
         /* @__PURE__ */ jsx("span", { className: "badge badge-green", style: {
           fontSize: "11px"
         }, children: "🔒 Secure" })
@@ -857,10 +857,10 @@ const FAQ_ITEMS = [{
   a: "It is a curated resource pack — not a course. You get organized links, commands, templates, and guides in a structured format, not video lessons or live coaching."
 }, {
   q: "How do I access the pack after payment?",
-  a: "After completing checkout you will receive an email with your login link. Use that to access your private dashboard where all resources are available."
+  a: "Create your 21k account, complete payment with the same email, then login to open your private dashboard. Buyer access is verified automatically after successful payment."
 }, {
   q: "Can I use this to build my own website?",
-  a: "Yes! The pack includes website-building resources, Astro and Netlify setup guides, and an SEO launch checklist specifically for building and monetizing developer websites."
+  a: "Yes! The pack includes website-building resources, Astro and Cloudflare setup guides, and an SEO launch checklist specifically for building and monetizing developer websites."
 }];
 function FaqSection() {
   return /* @__PURE__ */ jsx("section", { id: "faq", style: {
