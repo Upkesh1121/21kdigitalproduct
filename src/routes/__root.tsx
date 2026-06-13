@@ -45,7 +45,6 @@ function Nav() {
             <a href="/#faq" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>FAQ</a>
             <a href="/signup" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Signup</a>
             <a href="/login" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Login</a>
-            <a href="/admin" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>Admin</a>
           </nav>
 
           <div className="desktop-nav" style={{ alignItems: 'center', gap: '12px' }}>
@@ -79,7 +78,6 @@ function Nav() {
           <a href="/#faq" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>FAQ</a>
           <a href="/signup" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>Signup</a>
           <a href="/login" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>Login</a>
-          <a href="/admin" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 500 }} onClick={() => setOpen(false)}>Admin</a>
           <a href="/checkout" className="btn-primary" style={{ textAlign: 'center' }} onClick={() => setOpen(false)}>Get Pack</a>
         </nav>
       </div>

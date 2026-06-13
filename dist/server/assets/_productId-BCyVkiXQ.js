@@ -1,6 +1,6 @@
 import { jsxs, jsx } from "react/jsx-runtime";
 import { Link } from "@tanstack/react-router";
-import { b as Route } from "./router-BQ7q7X2Q.js";
+import { b as Route } from "./router-DbbVgeJc.js";
 import "react";
 function RouteComponent() {
   const product = Route.useLoaderData();

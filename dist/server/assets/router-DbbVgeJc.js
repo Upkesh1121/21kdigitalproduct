@@ -37,8 +37,7 @@ function Nav() {
         /* @__PURE__ */ jsx("a", { href: "/#pricing", style: { color: "#94a3b8", textDecoration: "none", fontSize: "14px", fontWeight: 500 }, children: "Pricing" }),
         /* @__PURE__ */ jsx("a", { href: "/#faq", style: { color: "#94a3b8", textDecoration: "none", fontSize: "14px", fontWeight: 500 }, children: "FAQ" }),
         /* @__PURE__ */ jsx("a", { href: "/signup", style: { color: "#94a3b8", textDecoration: "none", fontSize: "14px", fontWeight: 500 }, children: "Signup" }),
-        /* @__PURE__ */ jsx("a", { href: "/login", style: { color: "#94a3b8", textDecoration: "none", fontSize: "14px", fontWeight: 500 }, children: "Login" }),
-        /* @__PURE__ */ jsx("a", { href: "/admin", style: { color: "#94a3b8", textDecoration: "none", fontSize: "14px", fontWeight: 500 }, children: "Admin" })
+        /* @__PURE__ */ jsx("a", { href: "/login", style: { color: "#94a3b8", textDecoration: "none", fontSize: "14px", fontWeight: 500 }, children: "Login" })
       ] }),
       /* @__PURE__ */ jsx("div", { className: "desktop-nav", style: { alignItems: "center", gap: "12px" }, children: /* @__PURE__ */ jsx("a", { href: "/checkout", className: "btn-primary", style: { fontSize: "14px", padding: "8px 20px" }, children: "Get Pack" }) }),
       /* @__PURE__ */ jsx(
@@ -71,7 +70,6 @@ function Nav() {
       /* @__PURE__ */ jsx("a", { href: "/#faq", style: { color: "#cbd5e1", textDecoration: "none", fontWeight: 500 }, onClick: () => setOpen(false), children: "FAQ" }),
       /* @__PURE__ */ jsx("a", { href: "/signup", style: { color: "#cbd5e1", textDecoration: "none", fontWeight: 500 }, onClick: () => setOpen(false), children: "Signup" }),
       /* @__PURE__ */ jsx("a", { href: "/login", style: { color: "#cbd5e1", textDecoration: "none", fontWeight: 500 }, onClick: () => setOpen(false), children: "Login" }),
-      /* @__PURE__ */ jsx("a", { href: "/admin", style: { color: "#cbd5e1", textDecoration: "none", fontWeight: 500 }, onClick: () => setOpen(false), children: "Admin" }),
       /* @__PURE__ */ jsx("a", { href: "/checkout", className: "btn-primary", style: { textAlign: "center" }, onClick: () => setOpen(false), children: "Get Pack" })
     ] }) })
   ] });
@@ -198,7 +196,7 @@ const $$splitComponentImporter$8 = () => import("./signup-Bh8eMBCP.js");
 const Route$8 = createFileRoute("/signup")({
   component: lazyRouteComponent($$splitComponentImporter$8, "component")
 });
-const $$splitComponentImporter$7 = () => import("./resources-i8WGkNRO.js");
+const $$splitComponentImporter$7 = () => import("./resources-DWY7asZD.js");
 const Route$7 = createFileRoute("/resources")({
   component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
@@ -530,7 +528,7 @@ const $$splitComponentImporter$2 = () => import("./index-D9TTQW1p.js");
 const Route$2 = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-const $$splitComponentImporter$1 = () => import("./_sectionId-IggB2IOa.js");
+const $$splitComponentImporter$1 = () => import("./_sectionId-CNV1AXMz.js");
 const Route$1 = createFileRoute("/resources/$sectionId")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
@@ -544,7 +542,7 @@ const products = [
     price: 3e3
   }
 ];
-const $$splitComponentImporter = () => import("./_productId-BV_JKyg8.js");
+const $$splitComponentImporter = () => import("./_productId-BCyVkiXQ.js");
 const Route = createFileRoute("/products/$productId")({
   component: lazyRouteComponent($$splitComponentImporter, "component"),
   loader: async ({
