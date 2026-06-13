@@ -1,7 +1,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState, useMemo, useEffect } from "react";
 import { g as getAccessToken, c as checkBuyerAccess } from "./access-DU0rByU4.js";
-import { a as Route, R as RESOURCE_SECTIONS, r as resourceSectionSlug, T as TYPE_COLORS } from "./router-BBepFmeP.js";
+import { a as Route, R as RESOURCE_SECTIONS, r as resourceSectionSlug, T as TYPE_COLORS } from "./router-BQ7q7X2Q.js";
 import "./api-CWR5F0Sv.js";
 import "@tanstack/react-router";
 function ResourceSectionPage() {

@@ -198,7 +198,7 @@ const $$splitComponentImporter$8 = () => import("./signup-Bh8eMBCP.js");
 const Route$8 = createFileRoute("/signup")({
   component: lazyRouteComponent($$splitComponentImporter$8, "component")
 });
-const $$splitComponentImporter$7 = () => import("./resources-BYFa_CXm.js");
+const $$splitComponentImporter$7 = () => import("./resources-i8WGkNRO.js");
 const Route$7 = createFileRoute("/resources")({
   component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
@@ -522,7 +522,7 @@ const $$splitComponentImporter$4 = () => import("./checkout-Di6BLMPK.js");
 const Route$4 = createFileRoute("/checkout")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component")
 });
-const $$splitComponentImporter$3 = () => import("./admin-4wwzbS_O.js");
+const $$splitComponentImporter$3 = () => import("./admin-BP3V14PS.js");
 const Route$3 = createFileRoute("/admin")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
@@ -530,7 +530,7 @@ const $$splitComponentImporter$2 = () => import("./index-D9TTQW1p.js");
 const Route$2 = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-const $$splitComponentImporter$1 = () => import("./_sectionId-BnU4arue.js");
+const $$splitComponentImporter$1 = () => import("./_sectionId-IggB2IOa.js");
 const Route$1 = createFileRoute("/resources/$sectionId")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
@@ -544,7 +544,7 @@ const products = [
     price: 3e3
   }
 ];
-const $$splitComponentImporter = () => import("./_productId-CRAa5nCw.js");
+const $$splitComponentImporter = () => import("./_productId-BV_JKyg8.js");
 const Route = createFileRoute("/products/$productId")({
   component: lazyRouteComponent($$splitComponentImporter, "component"),
   loader: async ({

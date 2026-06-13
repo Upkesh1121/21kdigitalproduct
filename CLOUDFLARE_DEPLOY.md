@@ -28,6 +28,12 @@ ADMIN_EMAILS=your-admin@gmail.com
 
 Do not commit real secret values. Add them in Cloudflare Pages under Settings > Environment variables.
 
+Admin access:
+
+- `ADMIN_EMAILS` is the main admin login method. Put your Gmail here, then login at `/login` and open `/admin`.
+- `ADMIN_ACCESS_KEY` is not from Supabase. It is a backup password you create yourself, for example a long random string, and save in Cloudflare Pages environment variables.
+- The `/admin` page can grant buyer/admin access when either your logged-in email is listed in `ADMIN_EMAILS` or you enter the `ADMIN_ACCESS_KEY`.
+
 Cashfree webhook URL:
 
 ```text

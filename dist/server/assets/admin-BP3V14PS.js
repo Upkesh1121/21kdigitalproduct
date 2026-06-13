@@ -1,29 +1,52 @@
 import { jsx, jsxs } from "react/jsx-runtime";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { c as checkBuyerAccess, g as getAccessToken } from "./access-DU0rByU4.js";
 import { r as readApiJson } from "./api-CWR5F0Sv.js";
 function AdminPage() {
   const [adminKey, setAdminKey] = useState("");
+  const [adminStatus, setAdminStatus] = useState("checking");
+  const [adminEmail, setAdminEmail] = useState(null);
   const [email, setEmail] = useState("");
   const [orderId, setOrderId] = useState("");
   const [cfPaymentId, setCfPaymentId] = useState("");
   const [role, setRole] = useState("buyer");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
+  useEffect(() => {
+    let cancelled = false;
+    checkBuyerAccess().then((result) => {
+      if (cancelled) return;
+      setAdminEmail(result.email);
+      setAdminStatus(result.role === "admin" ? "admin" : "locked");
+    }).catch(() => {
+      if (!cancelled) setAdminStatus("locked");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const handleSubmit = async (event) => {
     event.preventDefault();
     setMessage("");
-    if (!adminKey.trim() || !email.trim()) {
-      setMessage("Enter the admin key and buyer email.");
+    if (!email.trim()) {
+      setMessage("Enter the buyer email.");
+      return;
+    }
+    if (adminStatus !== "admin" && !adminKey.trim()) {
+      setMessage("Login with your admin Gmail first, or enter ADMIN_ACCESS_KEY.");
       return;
     }
     setIsSubmitting(true);
     try {
+      const token = getAccessToken();
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      if (token) headers.authorization = `Bearer ${token}`;
+      if (adminKey.trim()) headers["x-admin-key"] = adminKey.trim();
       const response = await fetch("/api/admin-grant-access", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-key": adminKey.trim()
-        },
+        headers,
         body: JSON.stringify({
           email,
           role,
@@ -73,9 +96,19 @@ function AdminPage() {
       color: "#94a3b8",
       lineHeight: 1.65,
       margin: "0 0 26px"
-    }, children: "Use this after manual payment checks or support requests. The key must match ADMIN_ACCESS_KEY in Cloudflare." }),
+    }, children: "Login with your admin Gmail to grant buyer access. ADMIN_ACCESS_KEY is an optional backup secret from Cloudflare." }),
+    /* @__PURE__ */ jsx("div", { style: {
+      background: adminStatus === "admin" ? "rgba(16,185,129,0.08)" : "rgba(247,215,116,0.07)",
+      border: `1px solid ${adminStatus === "admin" ? "rgba(16,185,129,0.22)" : "rgba(247,215,116,0.18)"}`,
+      borderRadius: "10px",
+      padding: "13px 15px",
+      color: adminStatus === "admin" ? "#a7f3d0" : "#f8e7a0",
+      fontSize: "0.88rem",
+      lineHeight: 1.55,
+      marginBottom: "18px"
+    }, children: adminStatus === "checking" ? "Checking admin login..." : adminStatus === "admin" ? `Admin logged in${adminEmail ? ` as ${adminEmail}` : ""}.` : "Not logged in as admin. Login with the email in ADMIN_EMAILS, or use ADMIN_ACCESS_KEY below." }),
     /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, children: [
-      /* @__PURE__ */ jsx(AdminField, { label: "Admin key", id: "admin-key", children: /* @__PURE__ */ jsx("input", { id: "admin-key", type: "password", value: adminKey, onChange: (event) => setAdminKey(event.target.value), placeholder: "ADMIN_ACCESS_KEY", style: fieldStyle, autoComplete: "off" }) }),
+      /* @__PURE__ */ jsx(AdminField, { label: "Admin key (optional if admin Gmail is logged in)", id: "admin-key", children: /* @__PURE__ */ jsx("input", { id: "admin-key", type: "password", value: adminKey, onChange: (event) => setAdminKey(event.target.value), placeholder: "ADMIN_ACCESS_KEY", style: fieldStyle, autoComplete: "off" }) }),
       /* @__PURE__ */ jsx(AdminField, { label: "Buyer email", id: "buyer-email", children: /* @__PURE__ */ jsx("input", { id: "buyer-email", type: "email", value: email, onChange: (event) => setEmail(event.target.value), placeholder: "buyer@example.com", style: fieldStyle, autoComplete: "email" }) }),
       /* @__PURE__ */ jsx(AdminField, { label: "Order ID (optional)", id: "order-id", children: /* @__PURE__ */ jsx("input", { id: "order-id", value: orderId, onChange: (event) => setOrderId(event.target.value), placeholder: "Leave blank to mark latest order for this email", style: fieldStyle, autoComplete: "off" }) }),
       /* @__PURE__ */ jsx(AdminField, { label: "Cashfree payment ID (optional)", id: "cf-payment-id", children: /* @__PURE__ */ jsx("input", { id: "cf-payment-id", value: cfPaymentId, onChange: (event) => setCfPaymentId(event.target.value), placeholder: "cf_payment_id from Cashfree, if available", style: fieldStyle, autoComplete: "off" }) }),

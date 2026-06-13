@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import type { FormEvent } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { checkBuyerAccess, getAccessToken } from '../lib/access'
 import { readApiJson } from '../lib/api'
 
 export const Route = createFileRoute('/admin')({
@@ -17,6 +18,8 @@ type GrantResponse = {
 
 function AdminPage() {
   const [adminKey, setAdminKey] = useState('')
+  const [adminStatus, setAdminStatus] = useState<'checking' | 'admin' | 'locked'>('checking')
+  const [adminEmail, setAdminEmail] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [orderId, setOrderId] = useState('')
   const [cfPaymentId, setCfPaymentId] = useState('')
@@ -24,23 +27,50 @@ function AdminPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState('')
 
+  useEffect(() => {
+    let cancelled = false
+
+    checkBuyerAccess()
+      .then(result => {
+        if (cancelled) return
+        setAdminEmail(result.email)
+        setAdminStatus(result.role === 'admin' ? 'admin' : 'locked')
+      })
+      .catch(() => {
+        if (!cancelled) setAdminStatus('locked')
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setMessage('')
 
-    if (!adminKey.trim() || !email.trim()) {
-      setMessage('Enter the admin key and buyer email.')
+    if (!email.trim()) {
+      setMessage('Enter the buyer email.')
+      return
+    }
+
+    if (adminStatus !== 'admin' && !adminKey.trim()) {
+      setMessage('Login with your admin Gmail first, or enter ADMIN_ACCESS_KEY.')
       return
     }
 
     setIsSubmitting(true)
     try {
+      const token = getAccessToken()
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      }
+      if (token) headers.authorization = `Bearer ${token}`
+      if (adminKey.trim()) headers['x-admin-key'] = adminKey.trim()
+
       const response = await fetch('/api/admin-grant-access', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-key': adminKey.trim(),
-        },
+        headers,
         body: JSON.stringify({
           email,
           role,
@@ -79,11 +109,28 @@ function AdminPage() {
             Grant buyer access
           </h1>
           <p style={{ color: '#94a3b8', lineHeight: 1.65, margin: '0 0 26px' }}>
-            Use this after manual payment checks or support requests. The key must match ADMIN_ACCESS_KEY in Cloudflare.
+            Login with your admin Gmail to grant buyer access. ADMIN_ACCESS_KEY is an optional backup secret from Cloudflare.
           </p>
 
+          <div style={{
+            background: adminStatus === 'admin' ? 'rgba(16,185,129,0.08)' : 'rgba(247,215,116,0.07)',
+            border: `1px solid ${adminStatus === 'admin' ? 'rgba(16,185,129,0.22)' : 'rgba(247,215,116,0.18)'}`,
+            borderRadius: '10px',
+            padding: '13px 15px',
+            color: adminStatus === 'admin' ? '#a7f3d0' : '#f8e7a0',
+            fontSize: '0.88rem',
+            lineHeight: 1.55,
+            marginBottom: '18px',
+          }}>
+            {adminStatus === 'checking'
+              ? 'Checking admin login...'
+              : adminStatus === 'admin'
+                ? `Admin logged in${adminEmail ? ` as ${adminEmail}` : ''}.`
+                : 'Not logged in as admin. Login with the email in ADMIN_EMAILS, or use ADMIN_ACCESS_KEY below.'}
+          </div>
+
           <form onSubmit={handleSubmit}>
-            <AdminField label="Admin key" id="admin-key">
+            <AdminField label="Admin key (optional if admin Gmail is logged in)" id="admin-key">
               <input
                 id="admin-key"
                 type="password"

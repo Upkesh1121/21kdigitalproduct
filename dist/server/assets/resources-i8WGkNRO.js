@@ -1,7 +1,7 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
 import { g as getAccessToken, c as checkBuyerAccess } from "./access-DU0rByU4.js";
-import { R as RESOURCE_SECTIONS, T as TYPE_COLORS, D as DOWNLOAD_FILES } from "./router-BBepFmeP.js";
+import { R as RESOURCE_SECTIONS, T as TYPE_COLORS, D as DOWNLOAD_FILES } from "./router-BQ7q7X2Q.js";
 import "./api-CWR5F0Sv.js";
 import "@tanstack/react-router";
 function resourceSectionSlug(title) {

@@ -1,21 +1,54 @@
-import { json, markLatestOrderPaidByEmail, normalizeEmail, requireConfig, updateOrder, upsertBuyer } from '../_shared.js'
+import { json, markLatestOrderPaidByEmail, normalizeEmail, requireConfig, supabaseClientKey, supabaseProjectUrl, updateOrder, upsertBuyer } from '../_shared.js'
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
+const getAdminEmails = (env) => {
+  const configured = `${env.ADMIN_EMAIL || ''},${env.ADMIN_EMAILS || ''}`
+  return configured
+    .split(',')
+    .map(email => email.trim().toLowerCase())
+    .filter(Boolean)
+}
+
 const getAdminKey = (request) => {
   const header = request.headers.get('x-admin-key') || ''
-  if (header) return header.trim()
+  return header.trim()
+}
 
+const getBearerToken = (request) => {
   const auth = request.headers.get('authorization') || ''
   return auth.startsWith('Bearer ') ? auth.slice('Bearer '.length).trim() : ''
 }
 
+const getUser = async (env, token) => {
+  if (!token) return null
+
+  const response = await fetch(`${supabaseProjectUrl(env)}/auth/v1/user`, {
+    headers: {
+      apikey: supabaseClientKey(env),
+      authorization: `Bearer ${token}`,
+    },
+  })
+  if (!response.ok) return null
+  return response.json()
+}
+
+const isAuthorizedAdmin = async (request, env) => {
+  const configuredKey = String(env.ADMIN_ACCESS_KEY || '').trim()
+  const providedKey = getAdminKey(request)
+  if (configuredKey && providedKey && providedKey === configuredKey) return true
+
+  const user = await getUser(env, getBearerToken(request))
+  const email = user?.email?.toLowerCase()
+  return Boolean(email && getAdminEmails(env).includes(email))
+}
+
 export async function onRequestPost({ request, env }) {
   try {
-    requireConfig(env, ['ADMIN_ACCESS_KEY', 'SUPABASE_URL', 'SUPABASE_SECRET_KEY'])
+    requireConfig(env, ['SUPABASE_URL', 'SUPABASE_SECRET_KEY'])
 
-    if (getAdminKey(request) !== env.ADMIN_ACCESS_KEY) {
-      return json({ error: 'Invalid admin key.' }, 401)
+    if (!(await isAuthorizedAdmin(request, env))) {
+      return json({ error: 'Admin access required. Login with an ADMIN_EMAILS account or enter ADMIN_ACCESS_KEY.' }, 401)
     }
 
     const body = await request.json().catch(() => ({}))
