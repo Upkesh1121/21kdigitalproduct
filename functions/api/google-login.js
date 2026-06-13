@@ -2,7 +2,7 @@ import { loginRedirectUrl, requireConfig, safeNextPath, supabaseProjectUrl } fro
 
 export async function onRequestGet({ request, env }) {
   try {
-    requireConfig(env, ['SITE_URL', 'SUPABASE_URL', 'SUPABASE_PUBLISHABLE_KEY'])
+    requireConfig(env, ['SITE_URL', 'SUPABASE_URL'])
 
     const url = new URL(request.url)
     const next = safeNextPath(url.searchParams.get('next'))
