@@ -196,7 +196,7 @@ const $$splitComponentImporter$8 = () => import("./signup-Bh8eMBCP.js");
 const Route$8 = createFileRoute("/signup")({
   component: lazyRouteComponent($$splitComponentImporter$8, "component")
 });
-const $$splitComponentImporter$7 = () => import("./resources-DWY7asZD.js");
+const $$splitComponentImporter$7 = () => import("./resources-2g_co6w9.js");
 const Route$7 = createFileRoute("/resources")({
   component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
@@ -207,307 +207,40 @@ const TYPE_COLORS = {
   "Video Reference": "#ef4444",
   "GitHub Repo": "#10b981"
 };
-const RESOURCE_SECTIONS = [{
-  title: "Claude Code & AI Coding",
-  description: "A focused starter path for developers exploring Claude Code and similar AI coding workflows, with official tools, setup references, model-choice notes, and beginner-friendly workflow guidance.",
-  notes: "Includes a 21k setup checklist, common error fixes, free alternative notes, API safety reminders, and a recommended beginner workflow.",
-  resources: [{
-    title: "Claude Code Official",
-    url: "https://claude.com/product/claude-code",
-    type: "Official Tool"
-  }, {
-    title: "Claude Desktop",
-    url: "https://claude.com/download",
-    type: "Official Tool"
-  }, {
-    title: "Claude Cowork Docs",
-    url: "https://support.claude.com/en/articles/14680729-use-claude-cowork-with-third-party-platforms",
-    type: "Documentation"
-  }, {
-    title: "Reference Tutorial",
-    url: "https://compilefuture.com/blog/claude-code-tutorial/",
-    type: "Reference Tutorial"
-  }, {
-    title: "Reference Tutorial",
-    url: "https://compilefuture.com/blog/how-to-use-claude-code-free-unlimited/",
-    type: "Reference Tutorial"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=vGx5Y_gSEO0",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=VwW-VcWdPSA",
-    type: "Video Reference"
-  }]
-}, {
-  title: "OpenCode, OpenRouter & Kiro",
-  description: "A practical comparison area for gateway-style AI coding setups, helping buyers understand API access, coding assistant options, endpoint setup, and tool combinations.",
-  notes: "Includes a model selection guide, setup sequence, key-management checklist, troubleshooting notes, and copy-ready command snippets.",
-  resources: [{
-    title: "OpenCode",
-    url: "https://opencode.ai/",
-    type: "Official Tool"
-  }, {
-    title: "OpenCode Download",
-    url: "https://opencode.ai/download",
-    type: "Official Tool"
-  }, {
-    title: "OpenCode Zen",
-    url: "https://opencode.ai/zen",
-    type: "Official Tool"
-  }, {
-    title: "OpenCode Zen Endpoints",
-    url: "https://opencode.ai/docs/zen#endpoints",
-    type: "Documentation"
-  }, {
-    title: "OpenRouter",
-    url: "https://openrouter.ai/",
-    type: "Official Tool"
-  }, {
-    title: "OpenRouter Keys",
-    url: "https://openrouter.ai/keys",
-    type: "Official Tool"
-  }, {
-    title: "Kiro AI",
-    url: "https://kiro.dev/",
-    type: "Official Tool"
-  }, {
-    title: "Kiro Gateway",
-    url: "https://github.com/jwadow/kiro-gateway",
-    type: "GitHub Repo"
-  }, {
-    title: "Reference Tutorial",
-    url: "https://compilefuture.com/blog/claude-code-free-unlimited-opencode/",
-    type: "Reference Tutorial"
-  }, {
-    title: "Reference Tutorial",
-    url: "https://compilefuture.com/blog/claude-code-opus-for-free-using-amazon-kiro-ai/",
-    type: "Reference Tutorial"
-  }]
-}, {
-  title: "GitHub & Copilot",
-  description: "A beginner-safe map for GitHub, Copilot, student benefits, and legitimate free-access paths, with activation steps and comparison notes for coding assistants.",
-  notes: "Includes a verification checklist, student-pack application steps, GitHub setup checklist, and Copilot alternative comparison.",
-  resources: [{
-    title: "GitHub",
-    url: "https://github.com",
-    type: "Official Tool"
-  }, {
-    title: "GitHub Copilot",
-    url: "https://github.com/features/copilot",
-    type: "Official Tool"
-  }, {
-    title: "GitHub Student Pack",
-    url: "https://education.github.com/pack",
-    type: "Official Tool"
-  }, {
-    title: "GitHub Education Benefits",
-    url: "https://github.com/settings/education/benefits",
-    type: "Official Tool"
-  }, {
-    title: "Copilot Student Docs",
-    url: "https://docs.github.com/en/copilot/managing-copilot/managing-copilot-as-an-individual-subscriber/managing-your-github-copilot-pro-subscription/getting-free-access-to-copilot-pro-as-a-student-teacher-or-maintainer",
-    type: "Documentation"
-  }, {
-    title: "Reference Tutorial",
-    url: "https://compilefuture.com/blog/github-student-developer-pack-free-copilot-pro/",
-    type: "Reference Tutorial"
-  }, {
-    title: "Reference Tutorial",
-    url: "https://compilefuture.com/blog/github-copilot-for-free/",
-    type: "Reference Tutorial"
-  }]
-}, {
-  title: "VS Code AI Extensions",
-  description: "A workspace-building section for developers who want VS Code configured as a reliable AI coding environment with extensions, model setup, and safer automation defaults.",
-  notes: "Includes a recommended extension stack, Gemini API setup notes, local model setup, and safe auto-approval settings.",
-  resources: [{
-    title: "VS Code Download",
-    url: "https://code.visualstudio.com/download",
-    type: "Official Tool"
-  }, {
-    title: "VS Code Marketplace",
-    url: "https://marketplace.visualstudio.com/",
-    type: "Official Tool"
-  }, {
-    title: "Codeium Extension",
-    url: "https://marketplace.visualstudio.com/items?itemName=Codeium.codeium",
-    type: "Official Tool"
-  }, {
-    title: "Continue Extension",
-    url: "https://marketplace.visualstudio.com/items?itemName=Continue.continue",
-    type: "Official Tool"
-  }, {
-    title: "Continue Model Setup",
-    url: "https://docs.continue.dev/autocomplete/model-setup",
-    type: "Documentation"
-  }, {
-    title: "Reference Tutorial",
-    url: "https://compilefuture.com/blog/cursor-ai-for-free/",
-    type: "Reference Tutorial"
-  }]
-}, {
-  title: "Website Building & Deployment",
-  description: "A launch-focused collection for building fast AI-assisted websites with Astro, Tailwind, Cloudflare, and modern design references.",
-  notes: "Includes a launch checklist, SEO file templates, robots.txt, sitemap template, Cloudflare headers, and website prompt templates.",
-  resources: [{
-    title: "Astro Docs",
-    url: "https://docs.astro.build/en/getting-started/",
-    type: "Documentation"
-  }, {
-    title: "Astro Install",
-    url: "https://docs.astro.build/en/install-and-setup/",
-    type: "Documentation"
-  }, {
-    title: "Astro Cloudflare Deploy",
-    url: "https://docs.astro.build/en/guides/deploy/cloudflare/",
-    type: "Documentation"
-  }, {
-    title: "Astro MCP Docs",
-    url: "https://docs.astro.build/en/guides/build-with-ai/#astro-docs-mcp-server",
-    type: "Documentation"
-  }, {
-    title: "Tailwind Skills",
-    url: "https://github.com/Lombiq/Tailwind-Agent-Skills",
-    type: "GitHub Repo"
-  }, {
-    title: "Vercel Design MD",
-    url: "https://getdesign.md/vercel/design-md",
-    type: "Documentation"
-  }, {
-    title: "Google Stitch",
-    url: "https://stitch.withgoogle.com",
-    type: "Official Tool"
-  }]
-}, {
-  title: "SEO, Analytics & Monetization",
-  description: "A growth section for turning small websites and micro-tools into traffic-backed projects with keyword research, analytics, webmaster tools, and monetization planning.",
-  notes: "Includes a micro-tool idea sheet, 30-day SEO plan, AdSense checklist, domain research workflow, and monetization roadmap.",
-  resources: [{
-    title: "Ahrefs Keyword Generator",
-    url: "https://ahrefs.com/keyword-generator",
-    type: "Official Tool"
-  }, {
-    title: "Google Analytics",
-    url: "https://analytics.google.com",
-    type: "Official Tool"
-  }, {
-    title: "Google Search Console",
-    url: "https://search.google.com/search-console/about",
-    type: "Official Tool"
-  }, {
-    title: "Bing Webmaster",
-    url: "https://www.bing.com/webmasters/about",
-    type: "Official Tool"
-  }, {
-    title: "Google Ads",
-    url: "https://ads.google.com",
-    type: "Official Tool"
-  }, {
-    title: "Google AdSense",
-    url: "https://adsense.google.com/start/",
-    type: "Official Tool"
-  }, {
-    title: "Cloudflare",
-    url: "https://cloudflare.com",
-    type: "Official Tool"
-  }, {
-    title: "Instant Domain Search",
-    url: "https://instantdomainsearch.com/",
-    type: "Official Tool"
-  }, {
-    title: "LogoFast",
-    url: "https://logofa.st/",
-    type: "Official Tool"
-  }, {
-    title: "Example Tool",
-    url: "https://realonlineruler.com/",
-    type: "Official Tool"
-  }, {
-    title: "Reference Tutorial",
-    url: "https://compilefuture.com/blog/how-to-earn-using-ai/",
-    type: "Reference Tutorial"
-  }]
-}, {
-  title: "Local Models & Developer Setup",
-  description: "A setup hub for local AI workflows, package managers, Python tooling, Node.js, and local model experiments across common developer machines.",
-  notes: "Includes install order, Windows setup notes, Mac setup notes, local model checklist, and troubleshooting commands.",
-  resources: [{
-    title: "Node.js",
-    url: "https://nodejs.org/en/download",
-    type: "Official Tool"
-  }, {
-    title: "Chocolatey",
-    url: "https://chocolatey.org/install",
-    type: "Official Tool"
-  }, {
-    title: "Python",
-    url: "https://www.python.org/",
-    type: "Official Tool"
-  }, {
-    title: "UV Python",
-    url: "https://docs.astral.sh/uv/getting-started/installation/",
-    type: "Documentation"
-  }, {
-    title: "NVM Windows",
-    url: "https://github.com/coreybutler/nvm-windows/releases",
-    type: "GitHub Repo"
-  }, {
-    title: "Ollama",
-    url: "https://ollama.com/download",
-    type: "Official Tool"
-  }, {
-    title: "Qwen Coder",
-    url: "https://ollama.com/library/qwen2.5-coder",
-    type: "Official Tool"
-  }]
-}, {
-  title: "Video Library",
-  description: "A buyer-friendly watchlist for learning workflows visually. These are external learning references unless a file is marked as 21k-owned.",
-  notes: "Includes a viewing order, topic tags, and notes for turning each lesson into an implementation task.",
-  resources: [{
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=hKP9qbBmEqA",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=tDeLeyPvZn0",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=s4wwQnXI5ek",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=tzSdU1TIBvk",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=vGx5Y_gSEO0",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=b2Fa-4HtC9M",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=_kEc5IsadG8",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=lhsZao5spSU",
-    type: "Video Reference"
-  }, {
-    title: "Video Reference",
-    url: "https://www.youtube.com/watch?v=B34cIb1fex0",
-    type: "Video Reference"
-  }]
-}];
-const DOWNLOAD_FILES = ["21k-ai-tools-links.pdf", "21k-setup-commands.pdf", "21k-prompt-library.pdf", "21k-website-launch-checklist.pdf", "21k-seo-checklist.pdf", "21k-micro-tool-business-plan.pdf"];
-function resourceSectionSlug(title) {
-  return title.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+function ResourceLink({
+  resource
+}) {
+  const typeColor = TYPE_COLORS[resource.type];
+  return /* @__PURE__ */ jsxs("a", { href: resource.url, target: "_blank", rel: "noreferrer", style: resourceLinkStyle, children: [
+    /* @__PURE__ */ jsx("span", { style: {
+      color: "#f8fafc",
+      fontWeight: 700,
+      fontSize: "0.9rem"
+    }, children: resource.title }),
+    /* @__PURE__ */ jsx("span", { style: {
+      background: `${typeColor}18`,
+      border: `1px solid ${typeColor}40`,
+      color: typeColor,
+      padding: "3px 8px",
+      borderRadius: "100px",
+      fontSize: "11px",
+      fontWeight: 700,
+      width: "fit-content"
+    }, children: resource.type })
+  ] });
 }
+const resourceLinkStyle = {
+  background: "#111827",
+  border: "1px solid rgba(247,215,116,0.1)",
+  borderRadius: "10px",
+  padding: "14px",
+  color: "#e2e8f0",
+  textDecoration: "none",
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  minHeight: "98px"
+};
 const $$splitComponentImporter$6 = () => import("./login-Dh8L3jlm.js");
 const Route$6 = createFileRoute("/login")({
   component: lazyRouteComponent($$splitComponentImporter$6, "component")
@@ -528,7 +261,7 @@ const $$splitComponentImporter$2 = () => import("./index-D9TTQW1p.js");
 const Route$2 = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-const $$splitComponentImporter$1 = () => import("./_sectionId-CNV1AXMz.js");
+const $$splitComponentImporter$1 = () => import("./_sectionId-HxWn80YL.js");
 const Route$1 = createFileRoute("/resources/$sectionId")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
@@ -542,7 +275,7 @@ const products = [
     price: 3e3
   }
 ];
-const $$splitComponentImporter = () => import("./_productId-BCyVkiXQ.js");
+const $$splitComponentImporter = () => import("./_productId-4fRU6j8e.js");
 const Route = createFileRoute("/products/$productId")({
   component: lazyRouteComponent($$splitComponentImporter, "component"),
   loader: async ({
@@ -630,11 +363,9 @@ const router = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   getRouter
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  DOWNLOAD_FILES as D,
-  RESOURCE_SECTIONS as R,
+  Route$1 as R,
   TYPE_COLORS as T,
-  Route$1 as a,
+  ResourceLink as a,
   Route as b,
-  router as c,
-  resourceSectionSlug as r
+  router as r
 };

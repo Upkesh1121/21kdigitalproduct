@@ -8,10 +8,11 @@ import { onRequestPost as verifyMagicLinkPost } from './verify-magic-link.js'
 import { onRequestGet as googleLoginGet } from './google-login.js'
 import { onRequestGet as healthGet } from './health.js'
 import { onRequestPost as loginPost } from './login.js'
+import { onRequestGet as resourcesGet } from './resources.js'
 import { onRequestPost as signupPost } from './signup.js'
 import { json } from '../_shared.js'
 
-const ROUTES = ['create-cashfree-order', 'cashfree-webhook', 'check-access', 'send-magic-link', 'admin-grant-access', 'verify-cashfree-order', 'verify-magic-link', 'google-login', 'health', 'login', 'signup']
+const ROUTES = ['create-cashfree-order', 'cashfree-webhook', 'check-access', 'send-magic-link', 'admin-grant-access', 'verify-cashfree-order', 'verify-magic-link', 'google-login', 'health', 'login', 'resources', 'signup']
 
 const normalizePath = (path) => {
   if (Array.isArray(path)) return path.join('/')
@@ -32,6 +33,7 @@ export async function onRequest(context) {
   if (path === 'google-login' && method === 'GET') return googleLoginGet(context)
   if (path === 'health' && method === 'GET') return healthGet(context)
   if (path === 'login' && method === 'POST') return loginPost(context)
+  if (path === 'resources' && method === 'GET') return resourcesGet(context)
   if (path === 'signup' && method === 'POST') return signupPost(context)
 
   if (ROUTES.includes(path)) return json({ error: 'Method not allowed' }, 405)

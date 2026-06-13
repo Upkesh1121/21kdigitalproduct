@@ -1,8 +1,8 @@
 import { jsx, jsxs } from "react/jsx-runtime";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { g as getAccessToken, c as checkBuyerAccess } from "./access-DU0rByU4.js";
-import { a as Route, R as RESOURCE_SECTIONS, r as resourceSectionSlug, T as TYPE_COLORS } from "./router-DbbVgeJc.js";
-import "./api-CWR5F0Sv.js";
+import { r as readApiJson } from "./api-CWR5F0Sv.js";
+import { R as Route, a as ResourceLink } from "./router-CRNgXt45.js";
 import "@tanstack/react-router";
 function ResourceSectionPage() {
   const {
@@ -11,33 +11,45 @@ function ResourceSectionPage() {
   const [accessGranted, setAccessGranted] = useState(false);
   const [isCheckingAccess, setIsCheckingAccess] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const section = useMemo(() => RESOURCE_SECTIONS.find((item) => resourceSectionSlug(item.title) === sectionId), [sectionId]);
+  const [section, setSection] = useState(null);
+  const [message, setMessage] = useState("");
   useEffect(() => {
     let cancelled = false;
     const token = getAccessToken();
     setIsLoggedIn(Boolean(token));
-    checkBuyerAccess(token).then((result) => {
+    checkBuyerAccess(token).then(async (result) => {
+      if (cancelled) return;
+      setAccessGranted(result.has_access);
+      setIsLoggedIn(Boolean(token && result.email));
+      if (!result.has_access || !token) return;
+      const response = await fetch(`/api/resources?section=${encodeURIComponent(sectionId)}`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+      const data = await readApiJson(response, "/api/resources");
+      if (!response.ok || !data.section) throw new Error(data.error || "Resource section not found.");
+      if (!cancelled) setSection(data.section);
+    }).catch((error) => {
       if (!cancelled) {
-        setAccessGranted(result.has_access);
-        setIsLoggedIn(Boolean(token && result.email));
+        setAccessGranted(false);
+        setMessage(error instanceof Error ? error.message : "Could not load this resource section.");
       }
-    }).catch(() => {
-      if (!cancelled) setAccessGranted(false);
     }).finally(() => {
       if (!cancelled) setIsCheckingAccess(false);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sectionId]);
   if (isCheckingAccess) {
     return /* @__PURE__ */ jsx(StatusShell, { badge: "Checking Access", title: "Opening resource section", text: "Verifying your buyer email and purchase status." });
   }
-  if (!section) {
-    return /* @__PURE__ */ jsx(StatusShell, { badge: "Not Found", title: "Resource section not found", text: "Return to the resource dashboard to browse all available sections.", actionHref: "/resources", actionLabel: "Open Resources" });
-  }
   if (!accessGranted) {
     return /* @__PURE__ */ jsx(StatusShell, { badge: "Buyer Access Required", title: isLoggedIn ? "Complete payment for this account" : "Login to open this resource section", text: isLoggedIn ? "This account is logged in, but this section opens only after a verified 21k purchase with the same email." : "Login with your buyer email first. New users can create an account and complete payment to unlock the library.", actionHref: isLoggedIn ? "/checkout" : `/login?next=/resources/${sectionId}`, actionLabel: isLoggedIn ? "Complete Payment" : "Login to Continue" });
+  }
+  if (!section) {
+    return /* @__PURE__ */ jsx(StatusShell, { badge: "Not Found", title: "Resource section not found", text: message || "Return to the resource dashboard to browse all available sections.", actionHref: "/resources", actionLabel: "Open Resources" });
   }
   return /* @__PURE__ */ jsx("div", { style: {
     background: "#050810",
@@ -95,39 +107,7 @@ function ResourceSectionPage() {
       display: "grid",
       gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
       gap: "14px"
-    }, children: section.resources.map((resource, index) => {
-      const typeColor = TYPE_COLORS[resource.type];
-      return /* @__PURE__ */ jsxs("a", { href: resource.url, target: "_blank", rel: "noreferrer", style: {
-        background: "#0d1117",
-        border: "1px solid rgba(247,215,116,0.12)",
-        borderRadius: "12px",
-        padding: "18px",
-        color: "#e2e8f0",
-        textDecoration: "none",
-        minHeight: "120px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        gap: "14px"
-      }, children: [
-        /* @__PURE__ */ jsx("span", { style: {
-          color: "#f8fafc",
-          fontWeight: 850,
-          fontSize: "0.98rem",
-          lineHeight: 1.35
-        }, children: resource.title }),
-        /* @__PURE__ */ jsx("span", { style: {
-          background: `${typeColor}18`,
-          border: `1px solid ${typeColor}40`,
-          color: typeColor,
-          padding: "4px 9px",
-          borderRadius: "100px",
-          fontSize: "11px",
-          fontWeight: 800,
-          width: "fit-content"
-        }, children: resource.type })
-      ] }, `${resource.url}-${index}`);
-    }) })
+    }, children: section.resources.map((resource, index) => /* @__PURE__ */ jsx(ResourceLink, { resource }, `${resource.url}-${index}`)) })
   ] }) });
 }
 function StatusShell({

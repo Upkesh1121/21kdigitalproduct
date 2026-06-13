@@ -1,22 +1,25 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { checkBuyerAccess, getAccessToken } from '../../lib/access'
-import { RESOURCE_SECTIONS, TYPE_COLORS, resourceSectionSlug } from '../resources'
+import { readApiJson } from '../../lib/api'
+import { ResourceLink, type ResourceSection } from '../resources'
 
 export const Route = createFileRoute('/resources/$sectionId')({
   component: ResourceSectionPage,
 })
+
+type ResourceSectionResponse = {
+  section?: ResourceSection
+  error?: string
+}
 
 function ResourceSectionPage() {
   const { sectionId } = Route.useParams()
   const [accessGranted, setAccessGranted] = useState(false)
   const [isCheckingAccess, setIsCheckingAccess] = useState(true)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-  const section = useMemo(
-    () => RESOURCE_SECTIONS.find(item => resourceSectionSlug(item.title) === sectionId),
-    [sectionId],
-  )
+  const [section, setSection] = useState<ResourceSection | null>(null)
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -24,14 +27,25 @@ function ResourceSectionPage() {
     setIsLoggedIn(Boolean(token))
 
     checkBuyerAccess(token)
-      .then(result => {
-        if (!cancelled) {
-          setAccessGranted(result.has_access)
-          setIsLoggedIn(Boolean(token && result.email))
-        }
+      .then(async result => {
+        if (cancelled) return
+        setAccessGranted(result.has_access)
+        setIsLoggedIn(Boolean(token && result.email))
+
+        if (!result.has_access || !token) return
+
+        const response = await fetch(`/api/resources?section=${encodeURIComponent(sectionId)}`, {
+          headers: { authorization: `Bearer ${token}` },
+        })
+        const data = await readApiJson<ResourceSectionResponse>(response, '/api/resources')
+        if (!response.ok || !data.section) throw new Error(data.error || 'Resource section not found.')
+        if (!cancelled) setSection(data.section)
       })
-      .catch(() => {
-        if (!cancelled) setAccessGranted(false)
+      .catch(error => {
+        if (!cancelled) {
+          setAccessGranted(false)
+          setMessage(error instanceof Error ? error.message : 'Could not load this resource section.')
+        }
       })
       .finally(() => {
         if (!cancelled) setIsCheckingAccess(false)
@@ -40,14 +54,10 @@ function ResourceSectionPage() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [sectionId])
 
   if (isCheckingAccess) {
     return <StatusShell badge="Checking Access" title="Opening resource section" text="Verifying your buyer email and purchase status." />
-  }
-
-  if (!section) {
-    return <StatusShell badge="Not Found" title="Resource section not found" text="Return to the resource dashboard to browse all available sections." actionHref="/resources" actionLabel="Open Resources" />
   }
 
   if (!accessGranted) {
@@ -62,6 +72,10 @@ function ResourceSectionPage() {
         actionLabel={isLoggedIn ? 'Complete Payment' : 'Login to Continue'}
       />
     )
+  }
+
+  if (!section) {
+    return <StatusShell badge="Not Found" title="Resource section not found" text={message || 'Return to the resource dashboard to browse all available sections.'} actionHref="/resources" actionLabel="Open Resources" />
   }
 
   return (
@@ -97,44 +111,9 @@ function ResourceSectionPage() {
         </section>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '14px' }}>
-          {section.resources.map((resource, index) => {
-            const typeColor = TYPE_COLORS[resource.type]
-            return (
-              <a
-                key={`${resource.url}-${index}`}
-                href={resource.url}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  background: '#0d1117',
-                  border: '1px solid rgba(247,215,116,0.12)',
-                  borderRadius: '12px',
-                  padding: '18px',
-                  color: '#e2e8f0',
-                  textDecoration: 'none',
-                  minHeight: '120px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  gap: '14px',
-                }}
-              >
-                <span style={{ color: '#f8fafc', fontWeight: 850, fontSize: '0.98rem', lineHeight: 1.35 }}>{resource.title}</span>
-                <span style={{
-                  background: `${typeColor}18`,
-                  border: `1px solid ${typeColor}40`,
-                  color: typeColor,
-                  padding: '4px 9px',
-                  borderRadius: '100px',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  width: 'fit-content',
-                }}>
-                  {resource.type}
-                </span>
-              </a>
-            )
-          })}
+          {section.resources.map((resource, index) => (
+            <ResourceLink key={`${resource.url}-${index}`} resource={resource} />
+          ))}
         </div>
       </div>
     </div>
