@@ -4,6 +4,8 @@ compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist/client"
 
 [vars]
+SITE_URL = "https://21k.in"
+SUPABASE_URL = "https://ifycttfwpbtvrlsnzpee.supabase.co"
 CASHFREE_ENV = "production"
 CASHFREE_API_VERSION = "2023-08-01"
 PRODUCT_PRICE = "199"
